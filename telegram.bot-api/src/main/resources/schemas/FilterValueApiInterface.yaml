@@ -1,0 +1,5 @@
+type: object
+oneOf:
+  - $ref: './FilterLongApiObject.yaml'
+  - $ref: './FilterStringApiObject.yaml'
+  - $ref: './FilterDateTimeApiObject.yaml'

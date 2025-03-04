@@ -1,0 +1,12 @@
+title: Msg
+type: object
+properties:
+  type:
+    type: string
+  code:
+    type: string
+  text:
+    type: string
+  dest:
+    type: string
+description: ''

@@ -1,0 +1,6 @@
+type: object
+properties:
+  present:
+    type: boolean
+    example: false
+    default: false

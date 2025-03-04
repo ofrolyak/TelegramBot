@@ -1,0 +1,5 @@
+title: AdCreateApiRequest
+type: object
+properties:
+  ad:
+    type: string

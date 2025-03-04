@@ -1,0 +1,8 @@
+title: Msgs
+type: object
+properties:
+  msg:
+    type: array
+    items:
+      $ref: './MsgApiObject.yaml'
+description: 'Msgs'

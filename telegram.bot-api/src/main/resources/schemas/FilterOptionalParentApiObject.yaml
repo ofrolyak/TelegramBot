@@ -1,0 +1,10 @@
+title: todo
+type: object
+properties:
+  present:
+    $ref: './FilterOptionalPresentFieldApiObject.yaml'
+  value:
+    $ref: './FilterOptionalValueFieldApiObject.yaml'
+
+
+

@@ -1,0 +1,8 @@
+title: OptionalStringFilterApiRequest
+type: object
+allOf:
+  - $ref: './FilterOptionalParentApiObject.yaml'
+  - type: object
+    properties:
+      value:
+        $ref: './FilterStringApiObject.yaml'

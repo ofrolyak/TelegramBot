@@ -1,0 +1,15 @@
+title: StringFilterApiRequest
+type: object
+properties:
+  negate:
+    type: boolean
+    example: false
+    default: false
+  value:
+    type: string
+  action:
+    type: string
+    enum:
+      - LIKE
+      - EQUAL
+      - IS_NULL

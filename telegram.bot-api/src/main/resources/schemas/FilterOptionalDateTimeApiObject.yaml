@@ -1,0 +1,11 @@
+title: OptionalDateTimeApiRequest
+type: object
+allOf:
+  - $ref: './FilterOptionalParentApiObject.yaml'
+  - type: object
+    properties:
+      value:
+        $ref: './FilterDateTimeApiObject.yaml'
+
+
+

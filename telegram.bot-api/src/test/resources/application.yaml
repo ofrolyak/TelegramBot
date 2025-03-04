@@ -1,0 +1,29 @@
+telegram:
+  bot:
+    name: TELEGRAM_BOT_NAME_STUB
+    token: TELEGRAM_BOT_TOKEN_STUB
+    owner: TELEGRAM_BOT_TOKEN_STUB
+    scheduler:
+      cron: "*/1 * * * * *"
+      ad:
+        frequency:
+          hour: 1
+      message:
+        frequency:
+          hour: 1
+
+logging:
+  level:
+    root: off
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+  flyway:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+  profiles:
+    active: test

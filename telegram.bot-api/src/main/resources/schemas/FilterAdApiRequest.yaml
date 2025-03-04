@@ -1,0 +1,11 @@
+title: AdFilterApiRequest
+type: object
+properties:
+  id:
+    $ref: './FilterOptionalLongApiObject.yaml'
+  ad:
+    $ref: './FilterOptionalStringApiObject.yaml'
+  deliveredTime:
+    $ref: './FilterOptionalDateTimeApiObject.yaml'
+  creatingTime:
+    $ref: './FilterOptionalDateTimeApiObject.yaml'

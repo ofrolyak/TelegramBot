@@ -1,0 +1,5 @@
+title: GeneralErrorResult
+type: object
+properties:
+  msgs:
+    $ref: './MsgsApiObject.yaml'

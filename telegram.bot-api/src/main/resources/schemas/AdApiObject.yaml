@@ -1,0 +1,15 @@
+title: AdApiInstance
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+  ad:
+    type: string
+  deliveredTime:
+    type: string
+    format: date-time
+  creatingTime:
+    type: string
+    format: date-time
+description: 'AdApiInstance'

@@ -1,0 +1,8 @@
+title: AdsApiInstance
+type: object
+properties:
+  ad:
+    type: array
+    items:
+      $ref: './AdApiObject.yaml'
+description: 'AdsApiInstance'

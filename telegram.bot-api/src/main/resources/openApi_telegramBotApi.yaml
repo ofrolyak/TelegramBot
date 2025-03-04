@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  title: Telegram Bot Contract interface
+  contact: { }
+  version: '1.0'
+servers:
+  - url: http://localhost:8080/todo
+    variables: { }
+paths:
+
+  /v1/ads:
+    post:
+      security:
+        - Authorization:
+            - read_info
+            - write_info
+      tags:
+        - Ads
+      operationId: ad_create
+      summary: Create ad
+      parameters: [ ]
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/AdCreateApiRequest.yaml'
+        required: true
+      responses:
+        '201':
+          description: Ad has been created
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/AdApiObject.yaml'
+          headers: { }
+
+        '400':
+          description: The request cannot be processed due to the format or request data value
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+        '401':
+          description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
+          headers: { }
+
+        '403':
+          description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
+          headers: { }
+
+        '500':
+          description: Unexpected processing error. The request can be re-submitted to the processing
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+      deprecated: false
+
+  /v1/ads/filter:
+
+    post:
+      tags:
+        - Ads
+      security:
+        - Authorization:
+            - read_info
+
+      summary: Get list of available Ads
+      operationId: ads_request
+      parameters:
+
+        - in: query
+          name: page
+          description: Search start position for pagination support.
+          required: true
+          schema:
+            type: integer
+            example: 0
+            default: 0
+
+        - in: query
+          name: size
+          description: Number of requested elements. 20 by default.
+          required: true
+          schema:
+            type: integer
+            example: 20
+            default: 20
+
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/FilterAdApiRequest.yaml'
+        required: true
+
+      responses:
+        '200':
+          description: Successfully retrieved the response
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/AdsApiObject.yaml'
+
+        '400':
+          description: The request cannot be processed due to the format or request data value
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+        '401':
+          description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
+          headers: { }
+
+        '403':
+          description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
+          headers: { }
+
+        '500':
+          description: Unexpected processing error. The request can be re-submitted to the processing
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+      deprecated: false
+
+  /v1/ads/{adId}:
+
+    get:
+      security:
+        - Authorization:
+            - read_info
+            - write_info
+      tags:
+        - Ads
+      operationId: ad_get_by_id
+      summary: Get ad by ID
+      parameters:
+
+        - in: path
+          name: adId
+          description: Ad ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/AdApiObject.yaml'
+          headers: { }
+
+        '400':
+          description: The request cannot be processed due to the format or request data value
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+        '401':
+          description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
+          headers: { }
+
+        '403':
+          description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
+          headers: { }
+
+        '500':
+          description: Unexpected processing error. The request can be re-submitted to the processing
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+      deprecated: false
+
+    delete:
+      security:
+        - Authorization:
+            - read_info
+            - write_info
+      tags:
+        - Ads
+      operationId: ad_delete
+      summary: Delete ad
+      parameters:
+
+        - in: path
+          name: adId
+          description: Ad ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '204':
+          description: Ad has been deleted
+          headers: { }
+
+        '400':
+          description: The request cannot be processed due to the format or request data value
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+        '401':
+          description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
+          headers: { }
+
+        '403':
+          description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
+          headers: { }
+
+        '500':
+          description: Unexpected processing error. The request can be re-submitted to the processing
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
+
+      deprecated: false
+
+tags:
+  - name: Ads
+    description: 'Ads Description'
