@@ -25,9 +25,6 @@
         <url/>
     </scm>
     <properties>
-        <!--        <maven.compiler.source>17</maven.compiler.source>-->
-        <!--        <maven.compiler.target>17</maven.compiler.target>-->
-
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -49,31 +46,58 @@
         <io.projectreactor.version>3.6.0</io.projectreactor.version>
         <org.awaitility.version>4.2.0</org.awaitility.version>
         <h2.version>2.2.220</h2.version>
+        <junit-jupiter.version>5.12.0</junit-jupiter.version>
+        <spring.boot.vesion>3.4.0</spring.boot.vesion>
+        <byte-buddy.vesion>1.17.1</byte-buddy.vesion>
+        <springdoc-openapi.vesion>2.8.4</springdoc-openapi.vesion>
+        <jakarta.validation-api.vesion>3.1.1</jakarta.validation-api.vesion>
+        <jackson-databind-nullable.vesion>0.2.6</jackson-databind-nullable.vesion>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.telegram</groupId>
-                <artifactId>telegrambots-spring-boot-starter</artifactId>
-                <version>${telegram.vesion}</version>
-            </dependency>
 
+            <!-- Spring -->
 
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.vesion}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring.boot.vesion}</version>
             </dependency>
             <dependency>
-                <groupId>org.jeasy</groupId>
-                <artifactId>easy-random-core</artifactId>
-                <version>${easy.random.core.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.vesion}</version>
             </dependency>
             <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.core.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring.boot.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring.boot.vesion}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.retry</groupId>
@@ -85,6 +109,29 @@
                 <artifactId>spring-aspects</artifactId>
                 <version>${spring.aspects.version}</version>
             </dependency>
+
+            <!-- Utility library -->
+
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation-api.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-spring-boot-starter</artifactId>
+                <version>${telegram.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.vesion}</version>
+            </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
@@ -95,11 +142,6 @@
                 <artifactId>jaxb-api</artifactId>
                 <version>${jaxb.api.version}</version>
             </dependency>
-            <!--			<dependency>-->
-            <!--				<groupId>org.flywaydb</groupId>-->
-            <!--				<artifactId>flyway-database-postgresql</artifactId>-->
-            <!--				<version>${flyway.database.postgresql.version}</version>-->
-            <!--			</dependency>-->
             <dependency>
                 <groupId>ru.vasiand</groupId>
                 <artifactId>spring-boot-starter-log4jdbc</artifactId>
@@ -110,6 +152,19 @@
                 <artifactId>emoji-java</artifactId>
                 <version>${emoji.java.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${com.squareup.okhttp3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${org.awaitility.version}</version>
+            </dependency>
+
+            <!-- Test -->
+
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
@@ -123,11 +178,6 @@
             </dependency>
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${com.squareup.okhttp3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>mockwebserver</artifactId>
                 <version>${com.squareup.okhttp3.version}</version>
             </dependency>
@@ -137,77 +187,47 @@
                 <version>${io.projectreactor.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${org.awaitility.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-random-core</artifactId>
+                <version>${easy.random.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit-jupiter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.database.postgresql.version}</version>
+            </dependency>
+
         </dependencies>
+
     </dependencyManagement>
+
 
     <dependencies>
 
-
-<!--        <dependency>-->
-<!--            <groupId>javax.validation</groupId>-->
-<!--            <artifactId>validation-api</artifactId>-->
-<!--            <version>2.0.1.Final</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>javax.servlet</groupId>-->
-<!--            <artifactId>javax.servlet-api</artifactId>-->
-<!--            <version>3.0.1</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>javax.annotation</groupId>-->
-<!--            <artifactId>javax.annotation-api</artifactId>-->
-<!--            <version>1.3.2</version>-->
-<!--        </dependency>-->
-
-
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>3.1.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openapitools/jackson-databind-nullable -->
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
-        </dependency>
-
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-parent</artifactId>-->
-        <!--            <version>3.4.2</version>-->
-        <!--        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.12.0</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- Spring -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>3.4.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>3.4.2</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -219,26 +239,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>3.4.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-random-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -249,6 +249,49 @@
             <artifactId>spring-aspects</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.vasiand</groupId>
+            <artifactId>spring-boot-starter-log4jdbc</artifactId>
+        </dependency>
+
+        <!-- Utility library -->
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
@@ -257,19 +300,17 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-        <!--		<dependency>-->
-        <!--			<groupId>org.flywaydb</groupId>-->
-        <!--			<artifactId>flyway-database-postgresql</artifactId>-->
-        <!--			<scope>runtime</scope>-->
-        <!--		</dependency>-->
-
-        <dependency>
-            <groupId>ru.vasiand</groupId>
-            <artifactId>spring-boot-starter-log4jdbc</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
+        </dependency>
+
+        <!-- Test -->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -283,9 +324,19 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-            <version>3.4.2</version>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-random-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -313,76 +364,10 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springdoc</groupId>-->
-        <!--            <artifactId>springdoc-openapi-ui</artifactId>-->
-        <!--            <version>1.8.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springdoc</groupId>-->
-        <!--            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
-        <!--            <version>2.8.5</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-swagger2</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-swagger-ui</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.4</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>10.16.0</version>
-            <scope>test</scope>
-        </dependency>
-        <!--		<dependency>-->
-        <!--			<groupId>javax.persistence</groupId>-->
-        <!--			<artifactId>javax.persistence-api</artifactId>-->
-        <!--			 <version>2.2</version>-->
-        <!--			<scope>provided</scope>-->
-        <!--		</dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.17.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy-agent</artifactId>
-            <version>1.17.1</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>
         <plugins>
-            <!--			<plugin>-->
-            <!--				<groupId>org.springframework.boot</groupId>-->
-            <!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--				<configuration>-->
-            <!--					<executable>true</executable>-->
-            <!--				</configuration>-->
-            <!--			</plugin>-->
 
 
             <!--            <plugin>-->
