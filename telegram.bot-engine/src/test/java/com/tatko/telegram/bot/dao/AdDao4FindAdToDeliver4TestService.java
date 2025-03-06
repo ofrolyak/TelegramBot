@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.dao;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.Ad;
+import com.tatko.telegram.bot.entity.AdJpaEntity;
 import com.tatko.telegram.bot.repository.AdRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,18 +14,18 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 
-class AdDao4findAdToDeliver4Test extends MockitoExtensionBaseMockTests {
+class AdDao4FindAdToDeliver4TestService extends MockitoExtensionBaseMockTests {
 
     @Mock
     AdRepository adRepository;
     @InjectMocks
-    AdDao adDao;
+    AdDaoService adDaoService;
 
     @Test
     void findAdToDeliver4successAndExist4Test() {
 
         // Before
-        Ad ad = getGen().nextObject(Ad.class);
+        AdJpaEntity adJpaEntity = getGen().nextObject(AdJpaEntity.class);
         LocalDateTime localDateTime = getGen().nextObject(LocalDateTime.class);
 
         // When
@@ -33,16 +33,16 @@ class AdDao4findAdToDeliver4Test extends MockitoExtensionBaseMockTests {
                 adRepository
                         .findFirstByDeliveredTimeIsNullOrDeliveredTimeIsBefore(
                 eq(localDateTime)))
-                .thenReturn(Optional.of(ad));
+                .thenReturn(Optional.of(adJpaEntity));
 
         // Action
-        Optional<Ad> adOptional = adDao.findAdToDeliver(localDateTime);
+        Optional<AdJpaEntity> adOptional = adDaoService.findAdToDeliver(localDateTime);
 
         // Then
         assertThat(adOptional.isPresent())
                 .isTrue();
         assertThat(adOptional.get())
-                .isEqualTo(ad);
+                .isEqualTo(adJpaEntity);
         Mockito.verify(adRepository, Mockito.times(1))
                 .findFirstByDeliveredTimeIsNullOrDeliveredTimeIsBefore(
                         eq(localDateTime));
@@ -52,7 +52,7 @@ class AdDao4findAdToDeliver4Test extends MockitoExtensionBaseMockTests {
     void findAdToDeliver4successAndNotExist4Test() {
 
         // Before
-        Ad ad = getGen().nextObject(Ad.class);
+        AdJpaEntity adJpaEntity = getGen().nextObject(AdJpaEntity.class);
         LocalDateTime localDateTime = getGen().nextObject(LocalDateTime.class);
 
         // When
@@ -63,7 +63,7 @@ class AdDao4findAdToDeliver4Test extends MockitoExtensionBaseMockTests {
                 .thenReturn(Optional.empty());
 
         // Action
-        Optional<Ad> adOptional = adDao.findAdToDeliver(localDateTime);
+        Optional<AdJpaEntity> adOptional = adDaoService.findAdToDeliver(localDateTime);
 
         // Then
         assertThat(adOptional.isEmpty())

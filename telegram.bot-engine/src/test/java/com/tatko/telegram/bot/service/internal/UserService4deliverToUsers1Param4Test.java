@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation1Param;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class UserService4deliverToUsers1Param4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    UserDao userDao;
+    UserDaoService userDaoService;
     @Spy
     @InjectMocks
     UserService userService;
@@ -39,7 +39,7 @@ class UserService4deliverToUsers1Param4Test extends MockitoExtensionBaseMockTest
         String textMessage = getGen().nextObject(String.class);
 
         // When
-        when(userDao.findAll())
+        when(userDaoService.findAll())
                 .thenReturn(Collections.emptyList());
 
         // Action
@@ -49,7 +49,7 @@ class UserService4deliverToUsers1Param4Test extends MockitoExtensionBaseMockTest
         verify(userService, never())
                 .deliverMessageWithButtonToUser(
                         any(SendMessageOperation1Param.class),
-                        anyString(), any(User.class));
+                        anyString(), any(UserJpaEntity.class));
 
     }
 
@@ -60,18 +60,18 @@ class UserService4deliverToUsers1Param4Test extends MockitoExtensionBaseMockTest
         SendMessageOperation1Param sendMessageOperation1Param
                 = mock(SendMessageOperation1Param.class);
         String textMessage = getGen().nextObject(String.class);
-        User user1 = getGen().nextUser();
-        User user2 = getGen().nextUser();
+        UserJpaEntity userJpaEntity1 = getGen().nextUser();
+        UserJpaEntity userJpaEntity2 = getGen().nextUser();
 
         // When
-        when(userDao.findAll())
-                .thenReturn(List.of(user1, user2));
+        when(userDaoService.findAll())
+                .thenReturn(List.of(userJpaEntity1, userJpaEntity2));
         doNothing()
                 .when(userService)
                 .deliverMessageWithButtonToUser(
                         eq(sendMessageOperation1Param),
                         eq(textMessage),
-                        any(User.class));
+                        any(UserJpaEntity.class));
 
         // Action
         userService.deliverToUsers(sendMessageOperation1Param, textMessage);
@@ -80,7 +80,7 @@ class UserService4deliverToUsers1Param4Test extends MockitoExtensionBaseMockTest
         verify(userService, times(2))
                 .deliverMessageWithButtonToUser(
                         any(SendMessageOperation1Param.class),
-                        anyString(), any(User.class));
+                        anyString(), any(UserJpaEntity.class));
 
     }
 

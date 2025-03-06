@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation2Params;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,21 +26,21 @@ class UserService4deliverToUser2ParamsWith2Params4Test extends MockitoExtensionB
         SendMessageOperation2Params sendMessageOperation2Params
                 = mock(SendMessageOperation2Params.class);
         String testMessage = getGen().nextString();
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doNothing()
                 .when(userService)
                 .deliverToUser(eq(sendMessageOperation2Params),
-                        eq(testMessage), eq(user.getChatId()));
+                        eq(testMessage), eq(userJpaEntity.getChatId()));
 
         // Action
-        userService.deliverToUser(sendMessageOperation2Params, testMessage, user);
+        userService.deliverToUser(sendMessageOperation2Params, testMessage, userJpaEntity);
 
         // Then
         verify(userService, times(1))
                 .deliverToUser(eq(sendMessageOperation2Params),
-                        eq(testMessage), eq(user.getChatId()));
+                        eq(testMessage), eq(userJpaEntity.getChatId()));
 
     }
 

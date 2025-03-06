@@ -1,14 +1,13 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.util.BusinessUtility;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.when;
 class UserService4registerUser4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    UserDao userDao;
+    UserDaoService userDaoService;
     @Mock
     BusinessUtility businessUtility;
     @Spy
@@ -36,12 +35,12 @@ class UserService4registerUser4Test extends MockitoExtensionBaseMockTests {
 
         // Before
         Message message = getGen().nextMessage();
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findByChatId(anyLong()))
+        when(userDaoService.findByChatId(anyLong()))
                 .thenReturn(Optional.empty());
-        doReturn(user)
+        doReturn(userJpaEntity)
                 .when(businessUtility)
                 .buildUserByMessage(message);
 
@@ -49,8 +48,8 @@ class UserService4registerUser4Test extends MockitoExtensionBaseMockTests {
         userService.registerUser(message);
 
         // Then
-        verify(userDao, times(1))
-                .save(eq(user));
+        verify(userDaoService, times(1))
+                .save(eq(userJpaEntity));
 
     }
 
@@ -59,18 +58,18 @@ class UserService4registerUser4Test extends MockitoExtensionBaseMockTests {
 
         // Before
         Message message = getGen().nextMessage();
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findByChatId(anyLong()))
-                .thenReturn(Optional.of(user));
+        when(userDaoService.findByChatId(anyLong()))
+                .thenReturn(Optional.of(userJpaEntity));
 
         // Action
         userService.registerUser(message);
 
         // Then
-        verify(userDao, never())
-                .save(eq(user));
+        verify(userDaoService, never())
+                .save(eq(userJpaEntity));
 
     }
 

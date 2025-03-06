@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.dao;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,32 +12,32 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDao4findByChatId4Test extends MockitoExtensionBaseMockTests {
+class UserDaoService4FindByChatId4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
     UserRepository userRepository;
     @InjectMocks
-    UserDao userDao;
+    UserDaoService userDaoService;
 
     @Test
     void save4successAndExist4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
         long chatId = getGen().nextLong();
 
         // When
         Mockito.when(userRepository.findByChatId(Mockito.eq(chatId)))
-                .thenReturn(Optional.of(user));
+                .thenReturn(Optional.of(userJpaEntity));
 
         // Action
-        Optional<User> userOptional = userDao.findByChatId(chatId);
+        Optional<UserJpaEntity> userOptional = userDaoService.findByChatId(chatId);
 
         // Then
         assertThat(userOptional.isPresent())
                 .isTrue();
         assertThat(userOptional.get())
-                .isEqualTo(user);
+                .isEqualTo(userJpaEntity);
         Mockito.verify(userRepository, Mockito.times(1))
                 .findByChatId(Mockito.eq(chatId));
     }
@@ -46,7 +46,7 @@ class UserDao4findByChatId4Test extends MockitoExtensionBaseMockTests {
     void save4successAndNotExist4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
         long chatId = getGen().nextLong();
 
         // When
@@ -54,7 +54,7 @@ class UserDao4findByChatId4Test extends MockitoExtensionBaseMockTests {
                 .thenReturn(Optional.empty());
 
         // Action
-        Optional<User> userOptional = userDao.findByChatId(chatId);
+        Optional<UserJpaEntity> userOptional = userDaoService.findByChatId(chatId);
 
         // Then
         assertThat(userOptional.isPresent())

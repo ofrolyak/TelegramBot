@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.dao;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,12 +14,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDao4findAll4Test extends MockitoExtensionBaseMockTests {
+class UserDaoService4FindAll4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
     UserRepository userRepository;
     @InjectMocks
-    UserDao userDao;
+    UserDaoService userDaoService;
 
     @Test
     void save4success4notExist4Test() {
@@ -29,10 +29,10 @@ class UserDao4findAll4Test extends MockitoExtensionBaseMockTests {
                 .thenReturn(Collections.emptyList());
 
         // Action
-        Collection<User> userCollection = userDao.findAll();
+        Collection<UserJpaEntity> userJpaEntityCollection = userDaoService.findAll();
 
         // Then
-        assertThat(userCollection)
+        assertThat(userJpaEntityCollection)
                 .isEmpty();
         Mockito.verify(userRepository, Mockito.times(1))
                 .findAll();
@@ -42,22 +42,22 @@ class UserDao4findAll4Test extends MockitoExtensionBaseMockTests {
     void save4success4exist4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         Mockito.when(userRepository.findAll())
-                .thenReturn(List.of(user));
+                .thenReturn(List.of(userJpaEntity));
 
         // Action
-        List<User> userCollection = userDao.findAll();
+        List<UserJpaEntity> userJpaEntityCollection = userDaoService.findAll();
 
         // Then
-        assertThat(userCollection)
+        assertThat(userJpaEntityCollection)
                 .isNotEmpty();
-        assertThat(userCollection)
+        assertThat(userJpaEntityCollection)
                 .hasSize(1);
-        assertThat(userCollection.get(0))
-                .isEqualTo(user);
+        assertThat(userJpaEntityCollection.get(0))
+                .isEqualTo(userJpaEntity);
         Mockito.verify(userRepository, Mockito.times(1))
                 .findAll();
     }

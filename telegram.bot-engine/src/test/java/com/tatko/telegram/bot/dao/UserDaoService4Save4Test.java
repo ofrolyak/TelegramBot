@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.dao;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,31 +10,31 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDao4save4Test extends MockitoExtensionBaseMockTests {
+class UserDaoService4Save4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
     UserRepository userRepository;
     @InjectMocks
-    UserDao userDao;
+    UserDaoService userDaoService;
 
     @Test
     void save4success4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        Mockito.when(userRepository.save(Mockito.eq(user)))
-                .thenReturn(user);
+        Mockito.when(userRepository.save(Mockito.eq(userJpaEntity)))
+                .thenReturn(userJpaEntity);
 
         // Action
-        User userSaved = userDao.save(user);
+        UserJpaEntity userJpaEntitySaved = userDaoService.save(userJpaEntity);
 
         // Then
-        assertThat(userSaved)
-                .isEqualTo(user);
+        assertThat(userJpaEntitySaved)
+                .isEqualTo(userJpaEntity);
         Mockito.verify(userRepository, Mockito.times(1))
-                .save(Mockito.eq(user));
+                .save(Mockito.eq(userJpaEntity));
     }
 
 }

@@ -1,8 +1,6 @@
 package com.tatko.telegram.bot.service;
 
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.dao.UserRoleDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.OperationMarkerInterface;
 import com.tatko.telegram.bot.service.custom.operation.SetBotCommandsListOperation;
 import com.tatko.telegram.bot.service.custom.storage.BotCommandCustomSetStorage;
@@ -39,17 +37,17 @@ public final class TelegramBotConfiguratorService {
     @Autowired
     private BusinessUtility businessUtility;
 
-    /**
-     * Autowired by Spring UserDao bean.
-     */
-    @Autowired
-    private UserDao userDao;
-
-    /**
-     * Autowired by Spring UserRoleDao bean.
-     */
-    @Autowired
-    private UserRoleDao userRoleDao;
+//    /**
+//     * Autowired by Spring UserDao bean.
+//     */
+//    @Autowired
+//    private UserDaoService userDaoService;
+//
+//    /**
+//     * Autowired by Spring UserRoleDao bean.
+//     */
+//    @Autowired
+//    private UserRoleDao userRoleDao;
 
     /**
      * Autowired by Spring UserService bean.
@@ -172,14 +170,15 @@ public final class TelegramBotConfiguratorService {
             long chatId = StaticUtility.readChatId(update);
             serviceDataUserStorage.setChatId(chatId);
 
-            final User user = userService.getRegisteredUser(update);
-            serviceDataUserStorage.setUser(user);
+            final UserJpaEntity userJpaEntity
+                    = userService.getRegisteredUser(update);
+            serviceDataUserStorage.setUserJpaEntity(userJpaEntity);
 
             serviceDataUserStorage.setAdmin(
                     businessUtility.isTelegramBotAdmin(chatId));
 
-            serviceDataUserStorage.setUserRole(
-                    userRoleService.getUserRoleByUser(user));
+            serviceDataUserStorage.setUserRoleJpaEntity(
+                    userRoleService.getUserRoleByUser(userJpaEntity));
 
         } catch (Exception e) {
             serviceDataUserStorage.setBroken(true);

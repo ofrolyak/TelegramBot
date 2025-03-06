@@ -1,10 +1,10 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserArchDao;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserArch;
+import com.tatko.telegram.bot.dao.UserArchDaoService;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserArchJpaEntity;
 import com.tatko.telegram.bot.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +13,7 @@ import org.mockito.Spy;
 import org.springframework.beans.BeanUtils;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -23,9 +24,9 @@ import static org.mockito.Mockito.verify;
 class UserService4deleteUser4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    UserDao userDao;
+    UserDaoService userDaoService;
     @Mock
-    UserArchDao userArchDao;
+    UserArchDaoService userArchDaoService;
     @Spy
     @InjectMocks
     private UserService userService;
@@ -35,31 +36,31 @@ class UserService4deleteUser4Test extends MockitoExtensionBaseMockTests {
     void success4Test() {
 
         // Before
-        User user = getGen().nextUser();
-        UserArch userArch = new UserArch();
-        BeanUtils.copyProperties(user, userArch);
+        UserJpaEntity userJpaEntity = getGen().nextUser();
+        UserArchJpaEntity userArchJpaEntity = new UserArchJpaEntity();
+        BeanUtils.copyProperties(userJpaEntity, userArchJpaEntity);
 
         // When
-        doReturn(user)
+        doReturn(userJpaEntity)
                 .when(userService)
-                .findUserByUser(eq(user));
-        doReturn(userArch)
-                .when(userArchDao)
-                .save(eq(userArch));
+                .findUserByUser(eq(userJpaEntity));
+        doReturn(userArchJpaEntity)
+                .when(userArchDaoService)
+                .save(any(UserArchJpaEntity.class));
         doNothing()
-                .when(userDao)
-                .delete(eq(user));
+                .when(userDaoService)
+                .delete(eq(userJpaEntity));
 
         // Action
-        userService.deleteUser(user);
+        userService.deleteUser(userJpaEntity);
 
         // Verify
         verify(userService, times(1))
-                .findUserByUser(eq(user));
-        verify(userArchDao, times(1))
-                .save(eq(userArch));
-        verify(userDao, times(1))
-                .delete(eq(user));
+                .findUserByUser(eq(userJpaEntity));
+        verify(userArchDaoService, times(1))
+                .save(any(UserArchJpaEntity.class));
+        verify(userDaoService, times(1))
+                .delete(eq(userJpaEntity));
 
     }
 
@@ -67,26 +68,26 @@ class UserService4deleteUser4Test extends MockitoExtensionBaseMockTests {
     void userNotFoundException4Test() {
 
         // Before
-        User user = getGen().nextUser();
-        UserArch userArch = new UserArch();
-        BeanUtils.copyProperties(user, userArch);
+        UserJpaEntity userJpaEntity = getGen().nextUser();
+        UserArchJpaEntity userArchJpaEntity = new UserArchJpaEntity();
+        BeanUtils.copyProperties(userJpaEntity, userArchJpaEntity);
 
         // When
         doThrow(UserNotFoundException.class)
                 .when(userService)
-                .findUserByUser(eq(user));
+                .findUserByUser(eq(userJpaEntity));
 
         // Action
-        assertThatCode(() -> userService.deleteUser(user))
+        assertThatCode(() -> userService.deleteUser(userJpaEntity))
                 .isInstanceOf(UserNotFoundException.class);
 
         // Verify
         verify(userService, times(1))
-                .findUserByUser(eq(user));
-        verify(userArchDao, times(0))
-                .save(eq(userArch));
-        verify(userDao, times(0))
-                .delete(eq(user));
+                .findUserByUser(eq(userJpaEntity));
+        verify(userArchDaoService, times(0))
+                .save(eq(userArchJpaEntity));
+        verify(userDaoService, times(0))
+                .delete(eq(userJpaEntity));
 
     }
 

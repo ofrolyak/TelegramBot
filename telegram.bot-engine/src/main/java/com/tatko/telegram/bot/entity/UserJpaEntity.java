@@ -1,11 +1,14 @@
 package com.tatko.telegram.bot.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-
 /**
  * User entity.
  */
@@ -24,14 +26,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "USERS_ARCH")
-public class UserArch {
+@Table(name = "USERS")
+public class UserJpaEntity {
 
     /**
      * ID.
      */
     @Id
+    @ToString.Exclude
     @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "user_generator")
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_seq",
+            initialValue = 1, allocationSize = 1)
     private Long id;
 
     /**
@@ -67,6 +74,7 @@ public class UserArch {
 //    /**
 //     * User Role Id for this User.
 //     */
+//    @ToString.Exclude
 //    @Column(name = "USER_ROLE_ID", nullable = false)
 //    private Long userRoleId;
 
@@ -75,6 +83,6 @@ public class UserArch {
      */
     @ManyToOne
     @JoinColumn(name = "USER_ROLE_ID", nullable = false)
-    private UserRole userRole;
+    private UserRoleJpaEntity userRoleJpaEntity;
 
 }

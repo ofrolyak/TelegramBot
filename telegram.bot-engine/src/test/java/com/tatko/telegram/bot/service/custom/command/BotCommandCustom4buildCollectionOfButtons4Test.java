@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.custom.command;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.service.TelegramBotConfiguratorService;
 import com.tatko.telegram.bot.service.custom.storage.KeyButtonMapStorage;
 import com.tatko.telegram.bot.service.custom.storage.ServiceDataUserStorage;
@@ -31,14 +31,14 @@ class BotCommandCustom4buildCollectionOfButtons4Test extends MockitoExtensionBas
     void success4empty4Test() {
 
         // Before
-        UserRole userRole = getGen().nextUserRole();
+        UserRoleJpaEntity userRoleJpaEntity = getGen().nextUserRole();
         ServiceDataUserStorage serviceDataUserStorage = getGen().nextServiceDataUserStorage();
-        serviceDataUserStorage.setUserRole(userRole);
+        serviceDataUserStorage.setUserRoleJpaEntity(userRoleJpaEntity);
 
 
         // When
         when(keyButtonMapStorage.getKeyButtonMap())
-                .thenReturn(Map.of(userRole,
+                .thenReturn(Map.of(userRoleJpaEntity,
                         Map.of(BotCommandCustomServiceAction.class,
                                 Set.of(SEND_NEXT_DATE_FACT, SEND_AD))));
         when(telegramBotConfiguratorService.getServiceDataUserThreadLocal())

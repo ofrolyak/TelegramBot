@@ -1,6 +1,6 @@
 package com.tatko.telegram.bot.dao;
 
-import com.tatko.telegram.bot.entity.Ad;
+import com.tatko.telegram.bot.entity.AdJpaEntity;
 import com.tatko.telegram.bot.repository.AdRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class AdDao {
+public class AdDaoService {
 
     /**
      * Autowired by Spring AdRepository bean.
@@ -21,12 +21,12 @@ public class AdDao {
 
     /**
      * Save Ad entity.
-     * @param ad Ad entity to save.
+     * @param adJpaEntity Ad entity to save.
      * @return Saved Ad entity.
      */
-    public Ad save(final Ad ad) {
-        log.debug("Saving ad: {}", ad);
-        Ad entitySaved = adRepository.save(ad);
+    public AdJpaEntity save(final AdJpaEntity adJpaEntity) {
+        log.debug("Saving ad: {}", adJpaEntity);
+        AdJpaEntity entitySaved = adRepository.save(adJpaEntity);
         log.debug("Saved entity entitySaved: {}", entitySaved);
         return entitySaved;
     }
@@ -36,10 +36,11 @@ public class AdDao {
      * @param localDateTime
      * @return Optional of Ad entity.
      */
-    public Optional<Ad> findAdToDeliver(final LocalDateTime localDateTime) {
+    public Optional<AdJpaEntity> findAdToDeliver(
+            final LocalDateTime localDateTime) {
         log.debug("Start to process findAdToDeliver for localDateTime: {}",
                 localDateTime);
-        Optional<Ad> adOptional = adRepository
+        Optional<AdJpaEntity> adOptional = adRepository
                 .findFirstByDeliveredTimeIsNullOrDeliveredTimeIsBefore(
                         localDateTime);
         log.debug("Finish to process findAdToDeliver, adOptional: {}",

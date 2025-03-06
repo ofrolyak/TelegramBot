@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.custom.storage;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserRoleDao;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.dao.UserRoleDaoService;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.exception.UserRoleNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 class KeyButtonMapStorage4init4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    private UserRoleDao userRoleDao;
+    private UserRoleDaoService userRoleDaoService;
     @InjectMocks
     private KeyButtonMapStorage keyButtonMapStorage;
 
@@ -38,7 +38,7 @@ class KeyButtonMapStorage4init4Test extends MockitoExtensionBaseMockTests {
 
         // When
         doThrow(UserRoleNotFoundException.class)
-                .when(userRoleDao)
+                .when(userRoleDaoService)
                 .findById(anyLong());
 
 
@@ -52,14 +52,14 @@ class KeyButtonMapStorage4init4Test extends MockitoExtensionBaseMockTests {
     void postConstruct4successCase4Test() {
 
         // Before
-        UserRole userRole1 = getGen().nextUserRole();
-        UserRole userRole2 = getGen().nextUserRole();
+        UserRoleJpaEntity userRoleJpaEntity1 = getGen().nextUserRole();
+        UserRoleJpaEntity userRoleJpaEntity2 = getGen().nextUserRole();
 
         // When
-        when(userRoleDao.findById(eq(1L)))
-                .thenReturn(Optional.of(userRole1));
-        when(userRoleDao.findById(eq(2L)))
-                .thenReturn(Optional.of(userRole2));
+        when(userRoleDaoService.findById(eq(1L)))
+                .thenReturn(Optional.of(userRoleJpaEntity1));
+        when(userRoleDaoService.findById(eq(2L)))
+                .thenReturn(Optional.of(userRoleJpaEntity2));
 
         // Action
         keyButtonMapStorage.init();

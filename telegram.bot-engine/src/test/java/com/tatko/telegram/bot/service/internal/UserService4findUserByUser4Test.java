@@ -1,16 +1,13 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +17,7 @@ import static org.mockito.Mockito.when;
 class UserService4findUserByUser4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    UserDao userDao;
+    UserDaoService userDaoService;
     @InjectMocks
     UserService userService;
 
@@ -28,32 +25,32 @@ class UserService4findUserByUser4Test extends MockitoExtensionBaseMockTests {
     void success4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findById(user.getId()))
-                .thenReturn(Optional.of(user));
+        when(userDaoService.findById(userJpaEntity.getId()))
+                .thenReturn(Optional.of(userJpaEntity));
 
         // Action
-        User userByUser = userService.findUserByUser(user);
+        UserJpaEntity userByUserJpaEntity = userService.findUserByUser(userJpaEntity);
 
         // Then
-        assertThat(userByUser)
-                .isEqualTo(user);
+        assertThat(userByUserJpaEntity)
+                .isEqualTo(userJpaEntity);
     }
 
     @Test
     void failure4UserNotFoundException4Test() {
 
         // Before
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findById(user.getId()))
+        when(userDaoService.findById(userJpaEntity.getId()))
                 .thenThrow(UserNotFoundException.class);
 
         // Then
-        assertThatCode(() -> userService.findUserByUser(user))
+        assertThatCode(() -> userService.findUserByUser(userJpaEntity))
                 .isInstanceOf(UserNotFoundException.class);
     }
 

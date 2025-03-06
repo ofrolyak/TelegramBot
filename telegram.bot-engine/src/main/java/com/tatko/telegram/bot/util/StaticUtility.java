@@ -1,6 +1,6 @@
 package com.tatko.telegram.bot.util;
 
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -72,14 +72,14 @@ public class StaticUtility {
      * Build SendMessage instance.
      *
      * @param textMessage
-     * @param user
+     * @param userJpaEntity
      * @return SendMessage instance.
      */
     public static SendMessage buildSendMessage(
-            final String textMessage, final User user) {
+            final String textMessage, final UserJpaEntity userJpaEntity) {
         return SendMessage.builder()
                 .text(textMessage)
-                .chatId(user.getChatId())
+                .chatId(userJpaEntity.getChatId())
                 .build();
     }
 

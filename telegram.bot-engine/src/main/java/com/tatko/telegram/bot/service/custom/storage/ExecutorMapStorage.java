@@ -6,7 +6,7 @@ import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation1Para
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation2Params;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation3Params;
 import com.tatko.telegram.bot.service.custom.operation.SetBotCommandsListOperation;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

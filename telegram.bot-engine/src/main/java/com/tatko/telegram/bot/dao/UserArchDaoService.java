@@ -1,6 +1,6 @@
 package com.tatko.telegram.bot.dao;
 
-import com.tatko.telegram.bot.entity.UserArch;
+import com.tatko.telegram.bot.entity.UserArchJpaEntity;
 import com.tatko.telegram.bot.repository.UserArchRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Setter
 @Slf4j
-public class UserArchDao {
+public class UserArchDaoService {
 
     /**
      * UserRepository is used to get User based info.
@@ -24,12 +24,13 @@ public class UserArchDao {
     /**
      * Save User entity into DB.
      *
-     * @param userArch entity
+     * @param userArchJpaEntity entity
      * @return Saved User
      */
-    public UserArch save(final UserArch userArch) {
-        log.debug("Saving userArch: {}", userArch);
-        UserArch entitySaved = userArchRepository.save(userArch);
+    public UserArchJpaEntity save(final UserArchJpaEntity userArchJpaEntity) {
+        log.debug("Saving userArch: {}", userArchJpaEntity);
+        UserArchJpaEntity entitySaved
+                = userArchRepository.save(userArchJpaEntity);
         log.debug("Saved entity entitySaved: {}", entitySaved);
         return entitySaved;
     }

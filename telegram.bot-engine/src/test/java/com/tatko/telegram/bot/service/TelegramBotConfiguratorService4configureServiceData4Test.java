@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.service.custom.storage.ServiceDataUserStorage;
 import com.tatko.telegram.bot.service.internal.UserRoleService;
 import com.tatko.telegram.bot.service.internal.UserService;
@@ -40,8 +40,8 @@ class TelegramBotConfiguratorService4configureServiceData4Test
         // Before
         long chatId = getGen().nextLong();;
         boolean isTelegramBotAdmin = getGen().nextBoolean();;
-        User user = getGen().nextUser();
-        UserRole userRole = getGen().nextUserRole();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
+        UserRoleJpaEntity userRoleJpaEntity = getGen().nextUserRole();
 
         // When
         doReturn(true)
@@ -56,15 +56,15 @@ class TelegramBotConfiguratorService4configureServiceData4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(user)
+        doReturn(userJpaEntity)
                 .when(userServiceMock)
                 .getRegisteredUser(eq(updateMock));
         doReturn(isTelegramBotAdmin)
                 .when(businessUtilityMock)
                 .isTelegramBotAdmin(eq(chatId));
-        doReturn(userRole)
+        doReturn(userRoleJpaEntity)
                 .when(userRoleServiceMock)
-                .getUserRoleByUser(eq(user));
+                .getUserRoleByUser(eq(userJpaEntity));
 
         // Action
         telegramBotConfiguratorServiceMock.configureServiceData(updateMock);
@@ -75,12 +75,12 @@ class TelegramBotConfiguratorService4configureServiceData4Test
                 .getServiceDataUserThreadLocal().get();
         assertThat(serviceDataUserStorage.getChatId())
                 .isEqualTo(chatId);
-        assertThat(serviceDataUserStorage.getUser())
-                .isEqualTo(user);
+        assertThat(serviceDataUserStorage.getUserJpaEntity())
+                .isEqualTo(userJpaEntity);
         assertThat(serviceDataUserStorage.isAdmin())
                 .isEqualTo(isTelegramBotAdmin);
-        assertThat(serviceDataUserStorage.getUserRole())
-                .isEqualTo(userRole);
+        assertThat(serviceDataUserStorage.getUserRoleJpaEntity())
+                .isEqualTo(userRoleJpaEntity);
         assertThat(serviceDataUserStorage.isBroken())
                 .isFalse();
 
@@ -146,7 +146,7 @@ class TelegramBotConfiguratorService4configureServiceData4Test
 
         // Before
         long chatId = getGen().nextLong();;
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doReturn(true)
@@ -161,7 +161,7 @@ class TelegramBotConfiguratorService4configureServiceData4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(user)
+        doReturn(userJpaEntity)
                 .when(userServiceMock)
                 .getRegisteredUser(eq(updateMock));
         doThrow(RuntimeException.class)
@@ -186,7 +186,7 @@ class TelegramBotConfiguratorService4configureServiceData4Test
         // Before
         long chatId = getGen().nextLong();;
         boolean isTelegramBotAdmin = getGen().nextBoolean();;
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doReturn(true)
@@ -201,7 +201,7 @@ class TelegramBotConfiguratorService4configureServiceData4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(user)
+        doReturn(userJpaEntity)
                 .when(userServiceMock)
                 .getRegisteredUser(eq(updateMock));
         doReturn(isTelegramBotAdmin)
@@ -209,7 +209,7 @@ class TelegramBotConfiguratorService4configureServiceData4Test
                 .isTelegramBotAdmin(eq(chatId));
         doThrow(RuntimeException.class)
                 .when(userRoleServiceMock)
-                .getUserRoleByUser(eq(user));
+                .getUserRoleByUser(eq(userJpaEntity));
 
         // Action
         telegramBotConfiguratorServiceMock.configureServiceData(updateMock);

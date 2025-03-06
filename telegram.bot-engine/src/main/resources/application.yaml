@@ -43,7 +43,7 @@ telegram:
 
 logging:
   level:
-    root: debug
+    root: ${LOGGING_LEVEL_ROOT}
     org:
       hibernate:
         sql: debug

@@ -8,7 +8,7 @@ servers:
     variables: { }
 paths:
 
-  /v1/ads:
+  /ads:
     post:
       security:
         - Authorization:
@@ -59,7 +59,7 @@ paths:
 
       deprecated: false
 
-  /v1/ads/filter:
+  /ads/filter:
 
     post:
       tags:
@@ -131,7 +131,7 @@ paths:
 
       deprecated: false
 
-  /v1/ads/{adId}:
+  /ads/{adId}:
 
     get:
       security:

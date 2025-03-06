@@ -1,6 +1,6 @@
 package com.tatko.telegram.bot.repository;
 
-import com.tatko.telegram.bot.entity.UserArch;
+import com.tatko.telegram.bot.entity.UserArchJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface UserArchRepository extends JpaRepository<UserArch, Long> {
+public interface UserArchRepository
+        extends JpaRepository<UserArchJpaEntity, Long> {
 
 }

@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.custom.storage;
 
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +24,12 @@ public class ServiceDataUserStorage {
     /**
      * User instance for user that make activity in Telegram bot.
      */
-    private User user;
+    private UserJpaEntity userJpaEntity;
 
     /**
      * UserRole instance for user that make activity in Telegram bot.
      */
-    private UserRole userRole;
+    private UserRoleJpaEntity userRoleJpaEntity;
 
     /**
      * ChatId for current user.

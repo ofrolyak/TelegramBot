@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 @ContextConfiguration(classes = {
         TelegramBotService.class,
 })
-@EnableAutoConfiguration(exclude = {TelegramBotStarterConfiguration.class})
+//@EnableAutoConfiguration(exclude = {TelegramBotStarterConfiguration.class})
 class TelegramBotService4onUpdateReceived4Test extends SpringBootTestBaseMockTests {
 
     @MockBean
