@@ -32,9 +32,9 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: postgres
       # todo Have to be hidden
-      TELEGRAM_BOT_NAME:
-      TELEGRAM_BOT_OWNER:
-      TELEGRAM_BOT_TOKEN:
+      TELEGRAM_BOT_NAME: TO_DEFINE
+      TELEGRAM_BOT_OWNER: TO_DEFINE
+      TELEGRAM_BOT_TOKEN: TO_DEFINE
       LOGGING_LEVEL_ROOT: INFO
     build:
       context: .
