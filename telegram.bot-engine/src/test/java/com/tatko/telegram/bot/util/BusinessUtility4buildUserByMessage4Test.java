@@ -1,22 +1,31 @@
 package com.tatko.telegram.bot.util;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.config.TelegramBotConfig;
+import com.tatko.telegram.bot.dao.UserRoleDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 class BusinessUtility4buildUserByMessage4Test extends MockitoExtensionBaseMockTests {
 
+    @Mock
+    private UserRoleDaoService userRoleDaoService;
+
     @Spy
     @InjectMocks
-    BusinessUtility businessUtility;
+    private BusinessUtility businessUtility;
 
     @Test
     void success4isAdminCase4Test() {
@@ -28,20 +37,26 @@ class BusinessUtility4buildUserByMessage4Test extends MockitoExtensionBaseMockTe
 //       doReturn(true)
 //               .when(businessUtility)
 //                       .isTelegramBotAdmin(eq(chatId));
+       doReturn(false)
+               .when(businessUtility)
+                       .isTelegramBotAdmin(anyLong());
+       doReturn(Optional.of(getGen().nextUserRole()))
+               .when(userRoleDaoService)
+                       .findByName(anyString());
 
         // Action
-        User user = businessUtility.buildUserByMessage(message);
+        UserJpaEntity userJpaEntity = businessUtility.buildUserByMessage(message);
 
         // Then
-        assertThat(user)
+        assertThat(userJpaEntity)
                 .isNotNull();
-        assertThat(user.getChatId())
+        assertThat(userJpaEntity.getChatId())
                 .isEqualTo(message.getChatId());
-        assertThat(user.getFirstName())
+        assertThat(userJpaEntity.getFirstName())
                 .isEqualTo(message.getChat().getFirstName());
-        assertThat(user.getLastName())
+        assertThat(userJpaEntity.getLastName())
                 .isEqualTo(message.getChat().getLastName());
-        assertThat(user.getUserName())
+        assertThat(userJpaEntity.getUserName())
                 .isEqualTo(message.getChat().getUserName());
 //        assertThat(user.getUserRole().getId())
 //                .isEqualTo(2L);
@@ -58,20 +73,26 @@ class BusinessUtility4buildUserByMessage4Test extends MockitoExtensionBaseMockTe
 //        doReturn(false)
 //                .when(businessUtility)
 //                .isTelegramBotAdmin(eq(chatId));
+        doReturn(false)
+                .when(businessUtility)
+                .isTelegramBotAdmin(anyLong());
+        doReturn(Optional.of(getGen().nextUserRole()))
+                .when(userRoleDaoService)
+                .findByName(anyString());
 
         // Action
-        User user = businessUtility.buildUserByMessage(message);
+        UserJpaEntity userJpaEntity = businessUtility.buildUserByMessage(message);
 
         // Then
-        assertThat(user)
+        assertThat(userJpaEntity)
                 .isNotNull();
-        assertThat(user.getChatId())
+        assertThat(userJpaEntity.getChatId())
                 .isEqualTo(message.getChatId());
-        assertThat(user.getFirstName())
+        assertThat(userJpaEntity.getFirstName())
                 .isEqualTo(message.getChat().getFirstName());
-        assertThat(user.getLastName())
+        assertThat(userJpaEntity.getLastName())
                 .isEqualTo(message.getChat().getLastName());
-        assertThat(user.getUserName())
+        assertThat(userJpaEntity.getUserName())
                 .isEqualTo(message.getChat().getUserName());
 //        assertThat(user.getUserRole().getId())
 //                .isEqualTo(1L);

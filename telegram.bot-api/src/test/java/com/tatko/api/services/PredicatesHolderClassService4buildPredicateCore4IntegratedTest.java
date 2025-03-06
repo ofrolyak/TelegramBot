@@ -42,21 +42,21 @@ class PredicatesHolderClassService4buildPredicateCore4IntegratedTest extends Spr
         super.setUp();
 
         // Prepare
-        adJpaEntity1 = getGen().nextObject(AdJpaEntity.class);
+        adJpaEntity1 = getGen().nextAdJpaEntity();
         //adJpaEntity1.setId(1L);
         adJpaEntity1.setAd("ad1");
         adJpaEntity1.setCreatingTime(LocalDateTime.now().minusDays(1));
         adJpaEntity1.setDeliveredTime(LocalDateTime.now().minusDays(1));
         adJpaEntity1 = adsDaoService.save(adJpaEntity1);
 
-        adJpaEntity2 = getGen().nextObject(AdJpaEntity.class);
+        adJpaEntity2 = getGen().nextAdJpaEntity();
         //adJpaEntity2.setId(2L);
         adJpaEntity2.setAd("ad2");
         adJpaEntity2.setCreatingTime(LocalDateTime.now());
         adJpaEntity2.setDeliveredTime(LocalDateTime.now());
         adJpaEntity2 = adsDaoService.save(adJpaEntity2);
 
-        adJpaEntity3 = getGen().nextObject(AdJpaEntity.class);
+        adJpaEntity3 = getGen().nextAdJpaEntity();
         //adJpaEntity3.setId(3L);
         adJpaEntity3.setAd("ad3");
         adJpaEntity3.setCreatingTime(LocalDateTime.now().plusDays(1));

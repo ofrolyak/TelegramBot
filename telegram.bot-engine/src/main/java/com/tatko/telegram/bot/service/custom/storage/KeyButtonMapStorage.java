@@ -1,14 +1,14 @@
 package com.tatko.telegram.bot.service.custom.storage;
 
-import com.tatko.telegram.bot.dao.UserRoleDao;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.dao.UserRoleDaoService;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.exception.UserRoleNotFoundException;
 import com.tatko.telegram.bot.service.custom.button.KeyButton;
 import com.tatko.telegram.bot.service.custom.command.BotCommandCustom;
 import com.tatko.telegram.bot.service.custom.command.BotCommandCustomServiceAction;
 import com.tatko.telegram.bot.service.custom.command.BotCommandCustomSettingsAction;
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,12 @@ public class KeyButtonMapStorage {
      * Autowired by Spring UserRoleDao bean.
      */
     @Autowired
-    private UserRoleDao userRoleDao;
+    private UserRoleDaoService userRoleDaoService;
 
     /**
      * Date structure.
      */
-    private final Map<UserRole, Map<Class<? extends BotCommandCustom>,
+    private final Map<UserRoleJpaEntity, Map<Class<? extends BotCommandCustom>,
             Set<KeyButton>>> keyButtonMap = new HashMap<>();
 
     /**
@@ -49,11 +49,11 @@ public class KeyButtonMapStorage {
 
         log.info("Process init");
 
-        keyButtonMap.putAll(Map.of(userRoleDao.findById(2L)
+        keyButtonMap.putAll(Map.of(userRoleDaoService.findById(2L)
                         .orElseThrow(UserRoleNotFoundException::new),
                 Map.of(BotCommandCustomServiceAction.class,
                         Set.of(SEND_NEXT_DATE_FACT, SEND_AD)),
-                userRoleDao.findById(1L)
+                userRoleDaoService.findById(1L)
                         .orElseThrow(UserRoleNotFoundException::new),
                 Map.of(BotCommandCustomServiceAction.class,
                         Set.of(),

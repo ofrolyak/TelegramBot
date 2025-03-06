@@ -87,7 +87,7 @@ public abstract class BotCommandCustom {
         List<String> list = keyButtonMapStorage.getKeyButtonMap()
                 .get(telegramBotConfiguratorService
                         .getServiceDataUserThreadLocal()
-                        .get().getUserRole())
+                        .get().getUserRoleJpaEntity())
                 .get(this.getClass())
                 .stream()
                 .map(KeyButton::getLabel)

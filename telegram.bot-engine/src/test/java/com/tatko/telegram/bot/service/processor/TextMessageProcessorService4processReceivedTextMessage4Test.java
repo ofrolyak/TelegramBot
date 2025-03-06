@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.processor;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.exception.UserNotFoundException;
 import com.tatko.telegram.bot.service.business.AdService;
 import com.tatko.telegram.bot.service.business.DateFactService;
@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
@@ -35,7 +33,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
     @Mock
     UserService userService;
     @Mock
-    UserDao userDao;
+    UserDaoService userDaoService;
     @Mock
     AdService adService;
     @Mock
@@ -94,7 +92,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
         update.getMessage().setText(KeyButton.GET_MY_DATA.getLabel());
 
         // When
-        when(userDao.findByChatId(update.getMessage().getChatId()))
+        when(userDaoService.findByChatId(update.getMessage().getChatId()))
                 .thenReturn(Optional.empty());
 
         // Action
@@ -103,7 +101,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
 
         // Then
         verify(userService, never())
-                .deliverToUser(eq(sendMessageOperation2Params), anyString(), any(User.class));
+                .deliverToUser(eq(sendMessageOperation2Params), anyString(), any(UserJpaEntity.class));
     }
 
     @Test
@@ -112,21 +110,21 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
         // Before
         Update update = getGen().nextUpdate();
         update.getMessage().setText(KeyButton.GET_MY_DATA.getLabel());
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findByChatId(update.getMessage().getChatId()))
-                .thenReturn(Optional.of(user));
+        when(userDaoService.findByChatId(update.getMessage().getChatId()))
+                .thenReturn(Optional.of(userJpaEntity));
         doNothing()
                 .when(userService)
-                .deliverToUser(eq(sendMessageOperation2Params), anyString(), eq(user));
+                .deliverToUser(eq(sendMessageOperation2Params), anyString(), eq(userJpaEntity));
 
         // Action
         textMessageProcessorService.processReceivedTextMessage(update, sendMessageOperation2Params);
 
         // Then
         verify(userService, times(1))
-                .deliverToUser(eq(sendMessageOperation2Params), anyString(), any(User.class));
+                .deliverToUser(eq(sendMessageOperation2Params), anyString(), any(UserJpaEntity.class));
     }
 
     @Test
@@ -137,7 +135,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
         update.getMessage().setText(KeyButton.DELETE_MY_DATA.getLabel());
 
         // When
-        when(userDao.findByChatId(update.getMessage().getChatId()))
+        when(userDaoService.findByChatId(update.getMessage().getChatId()))
                 .thenReturn(Optional.empty());
 
         // Action
@@ -146,7 +144,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
 
         // Then
         verify(userService, never())
-                .deleteUser(any(User.class));
+                .deleteUser(any(UserJpaEntity.class));
     }
 
     @Test
@@ -155,14 +153,14 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
         // Before
         Update update = getGen().nextUpdate();
         update.getMessage().setText(KeyButton.DELETE_MY_DATA.getLabel());
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
-        when(userDao.findByChatId(update.getMessage().getChatId()))
-                .thenReturn(Optional.of(user));
+        when(userDaoService.findByChatId(update.getMessage().getChatId()))
+                .thenReturn(Optional.of(userJpaEntity));
         doNothing()
                 .when(userService)
-                .deleteUser(any(User.class));
+                .deleteUser(any(UserJpaEntity.class));
 
         // Action
         textMessageProcessorService.processReceivedTextMessage(
@@ -170,7 +168,7 @@ class TextMessageProcessorService4processReceivedTextMessage4Test
 
         // Then
         verify(userService, times(1))
-                .deleteUser(any(User.class));
+                .deleteUser(any(UserJpaEntity.class));
     }
 
     @Test

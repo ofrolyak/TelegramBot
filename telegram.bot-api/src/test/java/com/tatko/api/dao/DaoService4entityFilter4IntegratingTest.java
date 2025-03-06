@@ -33,7 +33,7 @@ class DaoService4entityFilter4IntegratingTest extends SpringBootTestBaseMockTest
         Pageable pageable = PageRequest.of(0, 20);
         PredicateCreator predicateCreator = (criteriaBuilder, root)
                 -> criteriaBuilder.isNull(root.get("id"));
-        AdJpaEntity adJpaEntity = getGen().nextObject(AdJpaEntity.class);
+        AdJpaEntity adJpaEntity = getGen().nextAdJpaEntity();
 
         // Before
         adsDaoService.save(adJpaEntity);
@@ -54,7 +54,7 @@ class DaoService4entityFilter4IntegratingTest extends SpringBootTestBaseMockTest
         Pageable pageable = PageRequest.of(0, 20);
         PredicateCreator predicateCreator = (criteriaBuilder, root)
                 -> criteriaBuilder.isNotNull(root.get("id"));
-        AdJpaEntity adJpaEntity = getGen().nextObject(AdJpaEntity.class);
+        AdJpaEntity adJpaEntity = getGen().nextAdJpaEntity();
 
         // Before
         adsDaoService.save(adJpaEntity);

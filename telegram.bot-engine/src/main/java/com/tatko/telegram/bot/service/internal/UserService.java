@@ -1,9 +1,9 @@
 package com.tatko.telegram.bot.service.internal;
 
-import com.tatko.telegram.bot.dao.UserArchDao;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserArch;
+import com.tatko.telegram.bot.dao.UserArchDaoService;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserArchJpaEntity;
 import com.tatko.telegram.bot.exception.BaseException;
 import com.tatko.telegram.bot.exception.UserNotFoundException;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation1Param;
@@ -29,13 +29,13 @@ public class UserService {
      * Autowired by Spring UserDao bean.
      */
     @Autowired
-    private UserDao userDao;
+    private UserDaoService userDaoService;
 
     /**
      * Autowired by Spring UserArchDao bean.
      */
     @Autowired
-    private UserArchDao userArchDao;
+    private UserArchDaoService userArchDaoService;
 
     /**
      * Autowired by Spring BusinessUtility bean.
@@ -68,19 +68,21 @@ public class UserService {
      *
      * @param sendMessageOperation2Params
      * @param textMessage
-     * @param user
+     * @param userJpaEntity
      */
     public void deliverToUser(
             final SendMessageOperation2Params sendMessageOperation2Params,
-            @NotNull final String textMessage, @NotNull final User user) {
+            @NotNull final String textMessage,
+            @NotNull final UserJpaEntity userJpaEntity) {
 
-        log.debug("Delivering textMessage {} to user {}", textMessage, user);
+        log.debug("Delivering textMessage {} to user {}",
+                textMessage, userJpaEntity);
 
         deliverToUser(sendMessageOperation2Params, textMessage,
-                user.getChatId());
+                userJpaEntity.getChatId());
 
         log.debug("textMessage {} has been delivered to user {}",
-                textMessage, user);
+                textMessage, userJpaEntity);
     }
 
     /**
@@ -112,7 +114,7 @@ public class UserService {
 
         log.debug("Delivering textMessage {}", textMessage);
 
-        var users = userDao.findAll();
+        var users = userDaoService.findAll();
 
         log.debug("Found {} users", users.size());
 
@@ -126,23 +128,24 @@ public class UserService {
      * Deliver.
      * @param sendMessageOperation1Param
      * @param textMessage
-     * @param user
+     * @param userJpaEntity
      */
     public void deliverMessageWithButtonToUser(
             final SendMessageOperation1Param sendMessageOperation1Param,
-            final String textMessage, final User user) {
+            final String textMessage, final UserJpaEntity userJpaEntity) {
 
-        log.debug("Process deliverMessageWithButtonToUser for user {}", user);
+        log.debug("Process deliverMessageWithButtonToUser for user {}",
+                userJpaEntity);
 
         SendMessage sendMessage
-                = StaticUtility.buildSendMessage(textMessage, user);
+                = StaticUtility.buildSendMessage(textMessage, userJpaEntity);
 
         CallbackProcessorService.andButtonToSendMessage(sendMessage);
 
         deliverToUser(sendMessageOperation1Param, sendMessage);
 
         log.debug("Finished process deliverMessageWithButtonToUser for user {}",
-                user);
+                userJpaEntity);
 
     }
 
@@ -158,7 +161,7 @@ public class UserService {
 
         log.debug("Delivering textMessage {}", textMessage);
 
-        var users = userDao.findAll();
+        var users = userDaoService.findAll();
 
         log.debug("Found {} users", users.size());
 
@@ -177,11 +180,12 @@ public class UserService {
 
         log.debug("Process register user for message {}", message);
 
-        if (userDao.findByChatId(message.getChatId()).isEmpty()) {
+        if (userDaoService.findByChatId(message.getChatId()).isEmpty()) {
 
-            User user = businessUtility.buildUserByMessage(message);
-            log.info("Register user {}", user);
-            userDao.save(user);
+            UserJpaEntity userJpaEntity
+                    = businessUtility.buildUserByMessage(message);
+            log.info("Register user {}", userJpaEntity);
+            userDaoService.save(userJpaEntity);
         }
 
         log.debug("Finished process register user for message {}", message);
@@ -191,40 +195,41 @@ public class UserService {
     /**
      * Delete user based on User instance.
      *
-     * @param user
+     * @param userJpaEntity
      */
     @Transactional
-    public void deleteUser(final User user) {
+    public void deleteUser(final UserJpaEntity userJpaEntity) {
 
-        log.debug("Process delete user {}", user);
+        log.debug("Process delete user {}", userJpaEntity);
 
         // Verify if user exists
-        findUserByUser(user);
+        findUserByUser(userJpaEntity);
 
-        UserArch userArch = new UserArch();
+        UserArchJpaEntity userArchJpaEntity = new UserArchJpaEntity();
 
-        BeanUtils.copyProperties(user, userArch);
+        BeanUtils.copyProperties(userJpaEntity, userArchJpaEntity);
 
-        userArchDao.save(userArch);
+        userArchDaoService.save(userArchJpaEntity);
 
-        userDao.delete(user);
+        userDaoService.delete(userJpaEntity);
 
-        log.debug("Finished process delete user {}", user);
+        log.debug("Finished process delete user {}", userJpaEntity);
 
     }
 
     /**
      * Find User entity by User entity.
      *
-     * @param user
+     * @param userJpaEntity
      * @return User entity.
      */
-    public User findUserByUser(final User user) {
-        log.debug("Process findUserByUser {}", user);
-        User user1 = userDao.findById(user.getId())
+    public UserJpaEntity findUserByUser(final UserJpaEntity userJpaEntity) {
+        log.debug("Process findUserByUser {}", userJpaEntity);
+        UserJpaEntity userJpaEntity1
+                = userDaoService.findById(userJpaEntity.getId())
                 .orElseThrow(UserNotFoundException::new);
-        log.debug("Finished process findUserByUser {}", user);
-        return user1;
+        log.debug("Finished process findUserByUser {}", userJpaEntity);
+        return userJpaEntity1;
     }
 
     /**
@@ -233,25 +238,25 @@ public class UserService {
      * @param update
      * @return Registered User instance.
      */
-    public User getRegisteredUser(final Update update) {
+    public UserJpaEntity getRegisteredUser(final Update update) {
 
         log.debug("Process getRegisteredUser {}", update);
 
-        User userRegistered;
+        UserJpaEntity userJpaEntityRegistered;
 
         final long chatId = update.getMessage().getChatId();
 
         try {
-            userRegistered = userDao.findByChatId(chatId)
+            userJpaEntityRegistered = userDaoService.findByChatId(chatId)
                     .orElseThrow(UserNotFoundException::new);
-            log.debug("User found userRegistered: {}", userRegistered);
+            log.debug("User found userRegistered: {}", userJpaEntityRegistered);
         } catch (UserNotFoundException e) {
             try {
                 registerUser(update.getMessage());
-                userRegistered = userDao.findByChatId(chatId)
+                userJpaEntityRegistered = userDaoService.findByChatId(chatId)
                         .orElseThrow(UserNotFoundException::new);
                 log.debug("User found once more userRegistered: {}",
-                        userRegistered);
+                        userJpaEntityRegistered);
             } catch (Exception e1) {
                 log.error("Error: ", e1);
                 throw new BaseException();
@@ -260,7 +265,7 @@ public class UserService {
 
         log.debug("Finished process getRegisteredUser {}", update);
 
-        return userRegistered;
+        return userJpaEntityRegistered;
 
     }
 

@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.processor;
 
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.exception.UserNotFoundException;
 import com.tatko.telegram.bot.service.business.AdService;
 import com.tatko.telegram.bot.service.business.DateFactService;
@@ -38,7 +38,7 @@ public class TextMessageProcessorService {
      * Autowired by Spring UserDao bean.
      */
     @Autowired
-    private UserDao userDao;
+    private UserDaoService userDaoService;
 
     /**
      * Autowired by Spring UserService bean.
@@ -247,17 +247,22 @@ public class TextMessageProcessorService {
                 .equals(KeyButton.GET_MY_DATA.getLabel())) {
             log.debug("Process processReceivedTextMessage for {} case",
                     KeyButton.GET_MY_DATA);
-            User user = userDao.findByChatId(update.getMessage().getChatId())
+            UserJpaEntity userJpaEntity
+                    = userDaoService.findByChatId(
+                            update.getMessage().getChatId())
                     .orElseThrow(UserNotFoundException::new);
             userService.deliverToUser(
-                    sendMessageOperation2Params, user.toString(), user);
+                    sendMessageOperation2Params,
+                    userJpaEntity.toString(), userJpaEntity);
         } else if (update.getMessage().getText()
                 .equals(KeyButton.DELETE_MY_DATA.getLabel())) {
             log.debug("Process processReceivedTextMessage for {} case",
                     KeyButton.DELETE_MY_DATA);
-            User user = userDao.findByChatId(update.getMessage().getChatId())
+            UserJpaEntity userJpaEntity
+                    = userDaoService.findByChatId(
+                            update.getMessage().getChatId())
                     .orElseThrow(UserNotFoundException::new);
-            userService.deleteUser(user);
+            userService.deleteUser(userJpaEntity);
         } else {
             log.debug("Process processReceivedTextMessage for {} case", "ELSE");
             // Command message

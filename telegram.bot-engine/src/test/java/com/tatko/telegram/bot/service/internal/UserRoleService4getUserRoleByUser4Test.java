@@ -1,9 +1,9 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserRoleDao;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.dao.UserRoleDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.exception.UserRoleNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doReturn;
 class UserRoleService4getUserRoleByUser4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    private UserRoleDao userRoleDaoMock;
+    private UserRoleDaoService userRoleDaoServiceMock;
     @InjectMocks
     private UserRoleService userRoleServiceMock;
 
@@ -26,21 +26,21 @@ class UserRoleService4getUserRoleByUser4Test extends MockitoExtensionBaseMockTes
     void process4Test() {
 
         // Before
-        UserRole userRole = getGen().nextUserRole();
-        User user = getGen().nextUser();
-        user.setUserRole(userRole);
+        UserRoleJpaEntity userRoleJpaEntity = getGen().nextUserRole();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
+        userJpaEntity.setUserRoleJpaEntity(userRoleJpaEntity);
 
         // When
-        doReturn(List.of(userRole))
-                .when(userRoleDaoMock)
+        doReturn(List.of(userRoleJpaEntity))
+                .when(userRoleDaoServiceMock)
                         .findAll();
 
         // Action
-        UserRole userRoleByUser = userRoleServiceMock.getUserRoleByUser(user);
+        UserRoleJpaEntity userRoleByUserJpaEntity = userRoleServiceMock.getUserRoleByUser(userJpaEntity);
 
         // Then
-        assertThat(userRoleByUser)
-                .isEqualTo(userRole);
+        assertThat(userRoleByUserJpaEntity)
+                .isEqualTo(userRoleJpaEntity);
 
     }
 
@@ -48,17 +48,17 @@ class UserRoleService4getUserRoleByUser4Test extends MockitoExtensionBaseMockTes
     void process4UserRoleNotFoundException4Test() {
 
         // Before
-        UserRole userRole = getGen().nextUserRole();
-        User user = getGen().nextUser();
-        user.setUserRole(userRole);
+        UserRoleJpaEntity userRoleJpaEntity = getGen().nextUserRole();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
+        userJpaEntity.setUserRoleJpaEntity(userRoleJpaEntity);
 
         // When
         doReturn(List.of())
-                .when(userRoleDaoMock)
+                .when(userRoleDaoServiceMock)
                 .findAll();
 
         // Then
-        assertThatCode(() -> userRoleServiceMock.getUserRoleByUser(user))
+        assertThatCode(() -> userRoleServiceMock.getUserRoleByUser(userJpaEntity))
                 .isInstanceOf(UserRoleNotFoundException.class);
 
     }

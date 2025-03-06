@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.business;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.Ad;
+import com.tatko.telegram.bot.entity.AdJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation2Params;
 import com.tatko.telegram.bot.service.internal.UserService;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class AdService4deliverAdToUsers4Test extends MockitoExtensionBaseMockTests {
     void process4Test() {
 
         // Before
-        Ad ad = getGen().nextObject(Ad.class);
+        AdJpaEntity adJpaEntity = getGen().nextObject(AdJpaEntity.class);
         SendMessageOperation2Params sendMessageOperation2Params = mock(SendMessageOperation2Params.class);
 
         // When
@@ -38,16 +38,16 @@ class AdService4deliverAdToUsers4Test extends MockitoExtensionBaseMockTests {
                 .deliverToUsers(any(SendMessageOperation2Params.class), anyString());
         doNothing()
                 .when(adService)
-                .refreshDeliveredDateForAd(eq(ad));
+                .refreshDeliveredDateForAd(eq(adJpaEntity));
 
         // Action
-        adService.deliverAdToUsers(sendMessageOperation2Params, ad);
+        adService.deliverAdToUsers(sendMessageOperation2Params, adJpaEntity);
 
         // Then
         verify(userService, times(1))
                 .deliverToUsers(eq(sendMessageOperation2Params), anyString());
         verify(adService, times(1))
-                .refreshDeliveredDateForAd(eq(ad));
+                .refreshDeliveredDateForAd(eq(adJpaEntity));
 
     }
 

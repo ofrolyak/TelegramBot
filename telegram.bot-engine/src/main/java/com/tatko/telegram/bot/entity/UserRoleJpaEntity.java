@@ -1,17 +1,18 @@
 package com.tatko.telegram.bot.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -23,10 +24,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+//@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "USER_ROLES")
-public class UserRole {
+public class UserRoleJpaEntity {
 
     /**
      * ID.
@@ -57,13 +60,13 @@ public class UserRole {
     /**
      * Set for User entities.
      */
-    @OneToMany(mappedBy = "userRole", fetch = FetchType.EAGER)
-    private Set<User> users;
+    @OneToMany(mappedBy = "userRoleJpaEntity", fetch = FetchType.EAGER)
+    private Set<UserJpaEntity> userJpaEntities;
 
     /**
      * Set for UserArch entities.
      */
-    @OneToMany(mappedBy = "userRole", fetch = FetchType.EAGER)
-    private Set<UserArch> usersArch;
+    @OneToMany(mappedBy = "userRoleJpaEntity", fetch = FetchType.EAGER)
+    private Set<UserArchJpaEntity> usersArch;
 
 }

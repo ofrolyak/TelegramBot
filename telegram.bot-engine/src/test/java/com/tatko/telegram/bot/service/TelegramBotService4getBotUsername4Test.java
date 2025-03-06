@@ -16,7 +16,7 @@ import static org.mockito.Mockito.doReturn;
 @ContextConfiguration(classes = {
         TelegramBotService.class,
         })
-@EnableAutoConfiguration(exclude = {TelegramBotStarterConfiguration.class})
+//@EnableAutoConfiguration(exclude = {TelegramBotStarterConfiguration.class})
 class TelegramBotService4getBotUsername4Test extends SpringBootTestBaseMockTests {
 
     @MockBean

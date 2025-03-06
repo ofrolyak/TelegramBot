@@ -1,5 +1,6 @@
 title: todo
 type: object
+x-parent: true
 properties:
   present:
     $ref: './FilterOptionalPresentFieldApiObject.yaml'

@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.internal;
 
-import com.tatko.telegram.bot.dao.UserRoleDao;
-import com.tatko.telegram.bot.entity.User;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.dao.UserRoleDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.exception.UserRoleNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +16,31 @@ public class UserRoleService {
      * Autowired by Spring UserRoleDao instance.
      */
     @Autowired
-    private UserRoleDao userRoleDao;
+    private UserRoleDaoService userRoleDaoService;
 
     /**
      * Get UserRole instance by User.
      *
-     * @param user
+     * @param userJpaEntity
      * @return UserRole instance.
      */
-    public UserRole getUserRoleByUser(final User user) {
+    public UserRoleJpaEntity getUserRoleByUser(
+            final UserJpaEntity userJpaEntity) {
 
-        log.debug("Process getUserRoleByUser for {}", user);
+        log.debug("Process getUserRoleByUser for {}", userJpaEntity);
 
-        UserRole userRole1 = userRoleDao.findAll().stream()
+        UserRoleJpaEntity userRoleJpaEntity1
+                = userRoleDaoService.findAll().stream()
                 .filter(userRole
-                        -> userRole.getId().equals(user.getUserRole().getId()))
+                        -> userRole.getId().equals(
+                                userJpaEntity.getUserRoleJpaEntity().getId()))
                 .findFirst()
                 .orElseThrow(UserRoleNotFoundException::new);
 
         log.debug("Finished process getUserRoleByUser for {}, userRole1: {}",
-                user, userRole1);
+                userJpaEntity, userRoleJpaEntity1);
 
-        return userRole1;
+        return userRoleJpaEntity1;
 
     }
 

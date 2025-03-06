@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.UserDao;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.dao.UserDaoService;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.exception.BaseException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ class UserService4getRegisteredUser4Test
     @Mock
     Update updateMock;
     @Mock
-    UserDao userDaoMock;
+    UserDaoService userDaoServiceMock;
     @Spy
     @InjectMocks
     UserService userServiceMock;
@@ -39,7 +39,7 @@ class UserService4getRegisteredUser4Test
 
         // Before
         long chatId = getGen().nextLong();;
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doReturn(messageMock)
@@ -48,16 +48,16 @@ class UserService4getRegisteredUser4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(Optional.of(user))
-                .when(userDaoMock)
+        doReturn(Optional.of(userJpaEntity))
+                .when(userDaoServiceMock)
                 .findByChatId(eq(chatId));
 
         // Action
-        User registeredUser = userServiceMock.getRegisteredUser(updateMock);
+        UserJpaEntity registeredUserJpaEntity = userServiceMock.getRegisteredUser(updateMock);
 
         // Then
-        assertThat(registeredUser)
-                .isEqualTo(user);
+        assertThat(registeredUserJpaEntity)
+                .isEqualTo(userJpaEntity);
 
     }
 
@@ -66,7 +66,7 @@ class UserService4getRegisteredUser4Test
 
         // Before
         long chatId = getGen().nextLong();;
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doReturn(messageMock)
@@ -75,19 +75,19 @@ class UserService4getRegisteredUser4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(Optional.empty(), Optional.of(user))
-                .when(userDaoMock)
+        doReturn(Optional.empty(), Optional.of(userJpaEntity))
+                .when(userDaoServiceMock)
                 .findByChatId(eq(chatId));
         doNothing()
                 .when(userServiceMock)
                 .registerUser(any(Message.class));
 
         // Action
-        User registeredUser = userServiceMock.getRegisteredUser(updateMock);
+        UserJpaEntity registeredUserJpaEntity = userServiceMock.getRegisteredUser(updateMock);
 
         // Then
-        assertThat(registeredUser)
-                .isEqualTo(user);
+        assertThat(registeredUserJpaEntity)
+                .isEqualTo(userJpaEntity);
 
     }
 
@@ -96,7 +96,7 @@ class UserService4getRegisteredUser4Test
 
         // Before
         long chatId = getGen().nextLong();;
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doReturn(messageMock)
@@ -105,8 +105,8 @@ class UserService4getRegisteredUser4Test
         doReturn(chatId)
                 .when(messageMock)
                 .getChatId();
-        doReturn(Optional.empty(), Optional.of(user))
-                .when(userDaoMock)
+        doReturn(Optional.empty(), Optional.of(userJpaEntity))
+                .when(userDaoServiceMock)
                 .findByChatId(eq(chatId));
         doThrow(RuntimeException.class)
                 .when(userServiceMock)

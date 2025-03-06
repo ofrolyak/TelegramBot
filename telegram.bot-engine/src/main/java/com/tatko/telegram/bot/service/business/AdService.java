@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.business;
 
-import com.tatko.telegram.bot.dao.AdDao;
-import com.tatko.telegram.bot.entity.Ad;
+import com.tatko.telegram.bot.dao.AdDaoService;
+import com.tatko.telegram.bot.entity.AdJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation2Params;
 import com.tatko.telegram.bot.service.internal.UserService;
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ public class AdService {
      * Autowired by Spring AdDao bean.
      */
     @Autowired
-    private AdDao adDao;
+    private AdDaoService adDaoService;
 
     /**
      * Frequency parameter for Ad scheduler.
@@ -37,35 +37,36 @@ public class AdService {
     /**
      * refreshDeliveredDateForAd.
      *
-     * @param ad
+     * @param adJpaEntity
      */
-    void refreshDeliveredDateForAd(@NotNull final Ad ad) {
+    void refreshDeliveredDateForAd(@NotNull final AdJpaEntity adJpaEntity) {
 
-        log.debug("Refreshing delivered dates for ad {}", ad);
+        log.debug("Refreshing delivered dates for ad {}", adJpaEntity);
 
-        ad.setDeliveredTime(LocalDateTime.now());
-        adDao.save(ad);
+        adJpaEntity.setDeliveredTime(LocalDateTime.now());
+        adDaoService.save(adJpaEntity);
 
-        log.debug("Ad {} has been refreshed", ad);
+        log.debug("Ad {} has been refreshed", adJpaEntity);
     }
 
     /**
      * Deliver Ad to all users.
      *
      * @param sendMessageOperation2Params
-     * @param ad
+     * @param adJpaEntity
      */
     void deliverAdToUsers(
             final SendMessageOperation2Params sendMessageOperation2Params,
-            @NotNull final Ad ad) {
+            @NotNull final AdJpaEntity adJpaEntity) {
 
-        log.debug("Delivering ad {} to users", ad);
+        log.debug("Delivering ad {} to users", adJpaEntity);
 
-        userService.deliverToUsers(sendMessageOperation2Params, ad.getAd());
+        userService.deliverToUsers(
+                sendMessageOperation2Params, adJpaEntity.getAd());
 
-        refreshDeliveredDateForAd(ad);
+        refreshDeliveredDateForAd(adJpaEntity);
 
-        log.debug("Ad {} has been delivered", ad);
+        log.debug("Ad {} has been delivered", adJpaEntity);
     }
 
     /**
@@ -77,7 +78,7 @@ public class AdService {
 
         log.info("Sending ads to all users");
 
-        var adOptional = adDao.findAdToDeliver(LocalDateTime.now()
+        var adOptional = adDaoService.findAdToDeliver(LocalDateTime.now()
                 .minusHours(telegramBotSchedulerAdFrequencyHour));
 
         adOptional.ifPresentOrElse(ad ->

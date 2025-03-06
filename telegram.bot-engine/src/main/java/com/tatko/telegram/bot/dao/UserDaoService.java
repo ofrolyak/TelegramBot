@@ -1,6 +1,6 @@
 package com.tatko.telegram.bot.dao;
 
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.repository.UserRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @Setter
 @Slf4j
-public class UserDao {
+public class UserDaoService {
 
     /**
      * UserRepository is used to get User based info.
@@ -31,9 +31,10 @@ public class UserDao {
      * @return {@code Optional<User>} of {@code Optional.empty()}
      * if the user is not found.
      */
-    public Optional<User> findByChatId(final Long chatId) {
+    public Optional<UserJpaEntity> findByChatId(final Long chatId) {
         log.debug("Finding user by chatId: {}", chatId);
-        Optional<User> userOptional = userRepository.findByChatId(chatId);
+        Optional<UserJpaEntity> userOptional
+                = userRepository.findByChatId(chatId);
         log.debug("Found userOptional: {}", userOptional);
         return userOptional;
     }
@@ -41,14 +42,14 @@ public class UserDao {
     /**
      * Save User entity into DB.
      *
-     * @param user entity
+     * @param userJpaEntity entity
      * @return Saved User
      */
-    public User save(final User user) {
-        log.debug("Saving user: {}", user);
-        User userSaved = userRepository.save(user);
-        log.debug("Saved userSaved: {}", userSaved);
-        return userSaved;
+    public UserJpaEntity save(final UserJpaEntity userJpaEntity) {
+        log.debug("Saving user: {}", userJpaEntity);
+        UserJpaEntity userJpaEntitySaved = userRepository.save(userJpaEntity);
+        log.debug("Saved userSaved: {}", userJpaEntitySaved);
+        return userJpaEntitySaved;
     }
 
     /**
@@ -56,21 +57,21 @@ public class UserDao {
      *
      * @return List of users.
      */
-    public List<User> findAll() {
+    public List<UserJpaEntity> findAll() {
         log.debug("Finding all users");
-        List<User> users = userRepository.findAll();
-        log.debug("Found users: {}", users);
-        return users;
+        List<UserJpaEntity> userJpaEntities = userRepository.findAll();
+        log.debug("Found users: {}", userJpaEntities);
+        return userJpaEntities;
     }
 
     /**
      * Delete User entity.
-     * @param user User entity.
+     * @param userJpaEntity User entity.
      */
-    public void delete(final User user) {
-        log.debug("Deleting user: {}", user);
-        userRepository.delete(user);
-        log.debug("Deleted user: {}", user);
+    public void delete(final UserJpaEntity userJpaEntity) {
+        log.debug("Deleting user: {}", userJpaEntity);
+        userRepository.delete(userJpaEntity);
+        log.debug("Deleted user: {}", userJpaEntity);
     }
 
     /**
@@ -78,9 +79,9 @@ public class UserDao {
      * @param id User id
      * @return Optional of User entity
      */
-    public Optional<User> findById(final long id) {
+    public Optional<UserJpaEntity> findById(final long id) {
         log.debug("Finding user by id: {}", id);
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<UserJpaEntity> userOptional = userRepository.findById(id);
         log.debug("Found userOptional: {}", userOptional);
         return userOptional;
     }

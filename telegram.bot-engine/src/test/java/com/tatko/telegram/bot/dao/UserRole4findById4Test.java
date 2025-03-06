@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.dao;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.UserRole;
+import com.tatko.telegram.bot.entity.UserRoleJpaEntity;
 import com.tatko.telegram.bot.repository.UserRoleRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ class UserRole4findById4Test extends MockitoExtensionBaseMockTests {
     @Mock
     UserRoleRepository userRoleRepository;
     @InjectMocks
-    UserRoleDao userRoleDao;
+    UserRoleDaoService userRoleDaoService;
 
     @Test
     void save4success4notExist4Test() {
@@ -32,7 +32,7 @@ class UserRole4findById4Test extends MockitoExtensionBaseMockTests {
                 .thenReturn(Optional.empty());
 
         // Action
-        Optional<UserRole> userRoleOptional = userRoleDao.findById(userRoleId);
+        Optional<UserRoleJpaEntity> userRoleOptional = userRoleDaoService.findById(userRoleId);
 
         // Then
         assertThat(userRoleOptional)
@@ -46,20 +46,20 @@ class UserRole4findById4Test extends MockitoExtensionBaseMockTests {
 
         // Before
         long userRoleId = getGen().nextLong();
-        UserRole userRole = getGen().nextUserRole();
+        UserRoleJpaEntity userRoleJpaEntity = getGen().nextUserRole();
 
         // When
         Mockito.when(userRoleRepository.findById(eq(userRoleId)))
-                .thenReturn(Optional.of(userRole));
+                .thenReturn(Optional.of(userRoleJpaEntity));
 
         // Action
-        Optional<UserRole> userRoleOptional = userRoleDao.findById(userRoleId);
+        Optional<UserRoleJpaEntity> userRoleOptional = userRoleDaoService.findById(userRoleId);
 
         // Then
         assertThat(userRoleOptional)
                 .isNotEmpty();
         assertThat(userRoleOptional.get())
-                .isEqualTo(userRole);
+                .isEqualTo(userRoleJpaEntity);
         Mockito.verify(userRoleRepository, Mockito.times(1))
                 .findById(anyLong());
     }

@@ -1,8 +1,8 @@
 package com.tatko.telegram.bot.service.business;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.dao.AdDao;
-import com.tatko.telegram.bot.entity.Ad;
+import com.tatko.telegram.bot.dao.AdDaoService;
+import com.tatko.telegram.bot.entity.AdJpaEntity;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 class AdService4refreshDeliveredDateForAd4Test extends MockitoExtensionBaseMockTests {
 
     @Mock
-    AdDao adDao;
+    AdDaoService adDaoService;
     @InjectMocks
     AdService adService;
 
@@ -27,21 +27,21 @@ class AdService4refreshDeliveredDateForAd4Test extends MockitoExtensionBaseMockT
     void process4Test() {
 
         // Before
-        Ad ad = mock(Ad.class);
+        AdJpaEntity adJpaEntity = mock(AdJpaEntity.class);
 
         // When
-        doReturn(ad)
-                .when(adDao)
-                .save(eq(ad));
+        doReturn(adJpaEntity)
+                .when(adDaoService)
+                .save(eq(adJpaEntity));
 
         // Action
-        adService.refreshDeliveredDateForAd(ad);
+        adService.refreshDeliveredDateForAd(adJpaEntity);
 
         // Then
-        verify(ad, times(1))
+        verify(adJpaEntity, times(1))
                 .setDeliveredTime(any(LocalDateTime.class));
-        verify(adDao, times(1))
-                .save(eq(ad));
+        verify(adDaoService, times(1))
+                .save(eq(adJpaEntity));
 
     }
 

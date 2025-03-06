@@ -4,5 +4,5 @@ allOf:
   - $ref: './FilterOptionalParentApiObject.yaml'
   - type: object
     properties:
-      value:
+      filterValue:
         $ref: './FilterStringApiObject.yaml'

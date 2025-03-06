@@ -1,7 +1,7 @@
 package com.tatko.telegram.bot.service.internal;
 
 import com.tatko.telegram.bot.MockitoExtensionBaseMockTests;
-import com.tatko.telegram.bot.entity.User;
+import com.tatko.telegram.bot.entity.UserJpaEntity;
 import com.tatko.telegram.bot.service.custom.operation.SendMessageOperation1Param;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ class UserService4deliverMessageWithButtonToUser4Test
         SendMessageOperation1Param sendMessageOperation1Param
                 = mock(SendMessageOperation1Param.class);
         String textMessage = getGen().nextObject(String.class);
-        User user = getGen().nextUser();
+        UserJpaEntity userJpaEntity = getGen().nextUser();
 
         // When
         doNothing()
@@ -39,13 +39,13 @@ class UserService4deliverMessageWithButtonToUser4Test
 
         // Action
         userService.deliverMessageWithButtonToUser(
-                sendMessageOperation1Param, textMessage, user);
+                sendMessageOperation1Param, textMessage, userJpaEntity);
 
         // Then
         verify(userService, times(1))
                 .deliverMessageWithButtonToUser(
                         eq(sendMessageOperation1Param),
-                        eq(textMessage), any(User.class));
+                        eq(textMessage), any(UserJpaEntity.class));
 
     }
 
