@@ -4,6 +4,7 @@ import com.tatko.api.apis.models.AdApiObject;
 import com.tatko.api.apis.models.AdCreateApiRequest;
 import com.tatko.api.apis.models.AdsApiObject;
 import com.tatko.api.apis.models.FilterAdApiRequest;
+import com.tatko.api.audit.annotations.InputValidateAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class AdsService {
      * @param body the request object containing necessary data for creating
      *             an advertisement.
      * @return the created advertisement represented as an AdApi*/
+    @InputValidateAnnotation
     public AdApiObject adCreate(final AdCreateApiRequest body) {
 
         AdApiObject adApiObject = adsUtilityService.adCreate(body);

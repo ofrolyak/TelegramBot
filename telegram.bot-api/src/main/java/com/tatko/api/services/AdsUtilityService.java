@@ -42,7 +42,9 @@ public class AdsUtilityService {
      */
     public void verifyIfAdExists(final Long adId) {
 
-        adsDaoService.findById(adId).orElseThrow(AdNotFoundException::new);
+        //adsDaoService.findById(adId).orElseThrow(AdNotFoundException::new);
+        adsDaoService.findById(adId).orElseThrow(()
+                -> new AdNotFoundException(new String[]{adId.toString()}));
 
     }
 
