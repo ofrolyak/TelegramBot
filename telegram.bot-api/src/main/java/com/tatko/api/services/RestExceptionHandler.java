@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Centralized exception handler for REST API that extends
  * {@code ResponseEntityExceptionHandler}.
@@ -50,14 +47,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<GeneralErrorResultApiResponse> handleAll(
             final TelegramBotApiException ex, final WebRequest request) {
         log.debug("TelegramBotApiException exception", ex);
-        List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+//        List<String> details = new ArrayList<>();
+//        details.add(ex.getLocalizedMessage());
         GeneralErrorResultApiResponse generalErrorResultApiResponse
                 = new GeneralErrorResultApiResponse();
         MsgsApiObject msgsApiObject = new MsgsApiObject();
         MsgApiObject msgApiObject = new MsgApiObject();
         msgApiObject.setType("ERROR");
-        msgApiObject.setCode("-1");
+        msgApiObject.setCode("" + ex.getErrorCode());
         msgApiObject.setDest(null);
         msgApiObject.setText(ex.getMessage());
         msgsApiObject.addMsgItem(msgApiObject);
@@ -82,8 +79,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<GeneralErrorResultApiResponse> handleAll(
             final Exception ex, final WebRequest request) {
         log.debug("Exception exception", ex);
-        List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+//        List<String> details = new ArrayList<>();
+//        details.add(ex.getLocalizedMessage());
         GeneralErrorResultApiResponse generalErrorResultApiResponse
                 = new GeneralErrorResultApiResponse();
         MsgsApiObject msgsApiObject = new MsgsApiObject();

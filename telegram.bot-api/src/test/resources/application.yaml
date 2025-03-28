@@ -14,7 +14,8 @@ telegram:
 
 logging:
   level:
-    root: off
+    com.tatko: debug
+    root: warn
 
 spring:
   datasource:

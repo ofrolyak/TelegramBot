@@ -52,6 +52,7 @@
         <springdoc-openapi.vesion>2.8.4</springdoc-openapi.vesion>
         <jakarta.validation-api.vesion>3.1.1</jakarta.validation-api.vesion>
         <jackson-databind-nullable.vesion>0.2.6</jackson-databind-nullable.vesion>
+        <gson.version>2.12.1</gson.version>
     </properties>
 
     <dependencyManagement>
@@ -161,6 +162,11 @@
                 <groupId>org.awaitility</groupId>
                 <artifactId>awaitility</artifactId>
                 <version>${org.awaitility.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
             </dependency>
 
             <!-- Test -->
@@ -311,6 +317,11 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- Test -->
@@ -486,6 +497,7 @@
                         <exclude>com/tatko/api/exceptions/**.class</exclude>
                         <exclude>com/tatko/api/apis/**.class</exclude>
                         <exclude>com/tatko/api/config/**.class</exclude>
+                        <exclude>com/tatko/api/validators/exceptions/**.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -517,12 +529,12 @@
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
 <!--todo-->
-                                            <minimum>0.80</minimum>
+                                            <minimum>0.95</minimum>
                                         </limit>
                                         <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.80</minimum>
+                                            <minimum>0.92</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -540,6 +552,7 @@
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
+
                 </configuration>
                 <executions>
                     <execution>

@@ -16,17 +16,24 @@ import org.springframework.stereotype.Controller;
 public class AdsController implements AdsApi {
 
     /**
-     * Autowired by String AdsService class instance.
+     * The AdsService instance, autowired into the AdsController class,
+     * serves as the primary service for handling advertisement-related
+     * operations such as creating, retrieving, filtering, and deleting
+     * advertisements. It encapsulates interactions with the underlying
+     * business logic and utilities to provide these functionalities.
      */
     @Autowired
     private AdsService adsService;
 
     /**
-     * Filter Ads.
-     * @param page Page number.
-     * @param size Page size.
-     * @param body FilterAdApiRequest class instance.
-     * @return
+     * Handles requests for retrieving advertisements based on filtering
+     * criteria with pagination.
+     *
+     * @param page The page number of results to retrieve.
+     * @param size The number of results per page.
+     * @param body The filtering criteria for retrieving advertisements.
+     * @return A ResponseEntity containing an AdsApiObject with the requested
+     * advertisements and a HTTP status of OK.
      */
     @Override
     public ResponseEntity<AdsApiObject> adsRequest(
@@ -38,9 +45,13 @@ public class AdsController implements AdsApi {
     }
 
     /**
-     * Create Ad.
-     * @param body AdCreateApiRequest class instance.
-     * @return ResponseEntity wrapper for AdApiObject class instance.
+     * Creates a new advertisement using the provided request body
+     * and returns the created advertisement object.
+     *
+     * @param body The request object containing details of the advertisement
+     *             to be created.
+     * @return A ResponseEntity containing the created AdApiObject
+     * and a HTTP status of CREATED.
      */
     @Override
     public ResponseEntity<AdApiObject> adCreate(final AdCreateApiRequest body) {
@@ -49,9 +60,13 @@ public class AdsController implements AdsApi {
     }
 
     /**
-     * Delete Ad by its ID.
-     * @param adId Ad ID.
-     * @return ResponseEntity wrapper for Void class instance.
+     * Deletes an advertisement by its unique identifier.
+     *
+     * @param adId The unique identifier of the advertisement to be deleted.
+     *             Must correspond to an existing advertisement in the system.
+     * @return A ResponseEntity with an HTTP status of NO_CONTENT indicating
+     * the advertisement
+     *         was successfully deleted.
      */
     @Override
     public ResponseEntity<Void> adDelete(final Long adId) {
@@ -60,9 +75,12 @@ public class AdsController implements AdsApi {
     }
 
     /**
-     * Get Ad info by its ID.
-     * @param adId Ad ID.
-     * @return ResponseEntity wrapper for AdApiObject class instance.
+     * Retrieves an advertisement by its unique identifier.
+     *
+     * @param adId The unique identifier of the advertisement to retrieve.
+     *             Must correspond to an existing advertisement in the system.
+     * @return A ResponseEntity containing the retrieved AdApiObject
+     * and an HTTP status of OK.
      */
     @Override
     public ResponseEntity<AdApiObject> adGetById(final Long adId) {
