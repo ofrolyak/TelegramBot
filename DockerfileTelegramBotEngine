@@ -4,7 +4,8 @@ WORKDIR /home/app
 
 COPY . .
 
-RUN mvn -f /home/app/telegram.bot-engine/pom.xml clean package -DskipTests
+#RUN mvn -f /home/app/telegram.bot-engine/pom.xml clean package -DskipTests
+RUN mvn -f /home/app/telegram.bot-engine/pom.xml clean package
 
 FROM openjdk:21-jdk-slim
 EXPOSE 8080

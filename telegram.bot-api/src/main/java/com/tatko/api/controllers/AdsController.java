@@ -6,12 +6,15 @@ import com.tatko.api.apis.models.AdCreateApiRequest;
 import com.tatko.api.apis.models.AdsApiObject;
 import com.tatko.api.apis.models.FilterAdApiRequest;
 import com.tatko.api.services.AdsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+@Slf4j
 @Controller
 public class AdsController implements AdsApi {
 
@@ -36,11 +39,15 @@ public class AdsController implements AdsApi {
      * advertisements and a HTTP status of OK.
      */
     @Override
+    @PreAuthorize("hasRole('user_role')")
     public ResponseEntity<AdsApiObject> adsRequest(
             final Integer page, final Integer size,
             final FilterAdApiRequest body) {
+        log.info("Started AdsController: adsRequest for page: {}, "
+                + "size: {}, body {}", page, size, body);
         AdsApiObject ads = adsService.adsRequest(
                 body, Pageable.ofSize(size).withPage(page));
+        log.info("Finished AdsController: AdsApiObject : {}", ads);
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
@@ -54,8 +61,11 @@ public class AdsController implements AdsApi {
      * and a HTTP status of CREATED.
      */
     @Override
+    @PreAuthorize("hasRole('admin_role')")
     public ResponseEntity<AdApiObject> adCreate(final AdCreateApiRequest body) {
+        log.info("Started AdsController: adCreate for body {}", body);
         AdApiObject ad = adsService.adCreate(body);
+        log.info("Finished AdsController: AdApiObject : {}", ad);
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
@@ -69,8 +79,11 @@ public class AdsController implements AdsApi {
      *         was successfully deleted.
      */
     @Override
+    @PreAuthorize("hasRole('admin_role')")
     public ResponseEntity<Void> adDelete(final Long adId) {
+        log.info("Started AdsController: adDelete for adId {}", adId);
         adsService.adDelete(adId);
+        log.info("Finished AdsController: adDelete for adId {}", adId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -83,8 +96,11 @@ public class AdsController implements AdsApi {
      * and an HTTP status of OK.
      */
     @Override
+    @PreAuthorize("hasRole('user_role')")
     public ResponseEntity<AdApiObject> adGetById(final Long adId) {
+        log.info("Started AdsController: adGetById for adId {}", adId);
         AdApiObject ad = adsService.adGetById(adId);
+        log.info("Finished AdsController: adGetById for adId {}", adId);
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
