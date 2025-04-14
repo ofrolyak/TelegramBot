@@ -10,10 +10,6 @@ paths:
 
   /ads:
     post:
-      security:
-        - Authorization:
-            - read_info
-            - write_info
       tags:
         - Ads
       operationId: ad_create
@@ -45,10 +41,18 @@ paths:
         '401':
           description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '403':
           description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '500':
           description: Unexpected processing error. The request can be re-submitted to the processing
@@ -64,10 +68,6 @@ paths:
     post:
       tags:
         - Ads
-      security:
-        - Authorization:
-            - read_info
-
       summary: Get list of available Ads
       operationId: ads_request
       parameters:
@@ -117,10 +117,18 @@ paths:
         '401':
           description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '403':
           description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '500':
           description: Unexpected processing error. The request can be re-submitted to the processing
@@ -134,10 +142,6 @@ paths:
   /ads/{adId}:
 
     get:
-      security:
-        - Authorization:
-            - read_info
-            - write_info
       tags:
         - Ads
       operationId: ad_get_by_id
@@ -171,10 +175,18 @@ paths:
         '401':
           description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '403':
           description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '500':
           description: Unexpected processing error. The request can be re-submitted to the processing
@@ -186,10 +198,6 @@ paths:
       deprecated: false
 
     delete:
-      security:
-        - Authorization:
-            - read_info
-            - write_info
       tags:
         - Ads
       operationId: ad_delete
@@ -219,10 +227,18 @@ paths:
         '401':
           description: Unauthorized. The request cannot be processed due to the issue with provided authentication information
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '403':
           description: Forbidden. Access to the requested resource is forbidden due to the caller's access permissions
           headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/GeneralErrorResultApiResponse.yaml'
 
         '500':
           description: Unexpected processing error. The request can be re-submitted to the processing
@@ -236,3 +252,4 @@ paths:
 tags:
   - name: Ads
     description: 'Ads Description'
+

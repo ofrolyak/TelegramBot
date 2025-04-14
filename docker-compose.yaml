@@ -1,16 +1,27 @@
+
+#1  /opt/bitnami/keycloak/bin/kc.sh export --users realm_file --dir /tmp
+#2  Container -> Select specific container -> Right button of mouse -> Show files -> Select /tmp -> Download and Scratch
+
 #version: '3.9'
 
 services:
 
   telegram.bot-api_service:
     container_name: telegram.bot-api_container
+    env_file: .env
     environment:
-      POSTGRES_DATABASE: postgres
-      POSTGRES_HOST: postgres_service
-      POSTGRES_PORT: 5432
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
-      LOGGING_LEVEL_ROOT: INFO
+      POSTGRES_DATABASE: ${TELEGRAM_BOT_POSTGRES_DB}
+      POSTGRES_HOST: ${TELEGRAM_BOT_POSTGRES_HOST}
+      POSTGRES_PORT: ${TELEGRAM_BOT_POSTGRES_PORT}
+      POSTGRES_USERNAME: ${TELEGRAM_BOT_POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${TELEGRAM_BOT_POSTGRES_PASSWORD}
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL_ROOT}
+      KEYCLOAK_ISSUER_URI_HOST: ${KEYCLOAK_ISSUER_URI_HOST}
+      KEYCLOAK_ISSUER_URI_PORT: ${KEYCLOAK_ISSUER_URI_PORT}
+      KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
     build:
       context: .
       dockerfile: DockerfileTelegramBotApi
@@ -21,21 +32,21 @@ services:
     ports:
       - "8088:8080"
     depends_on:
-      - telegram.bot-engine_service
+      - postgres_service
 
   telegram.bot-engine_service:
     container_name: telegram.bot-engine_container
+    env_file: .env
     environment:
-      POSTGRES_DATABASE: postgres
-      POSTGRES_HOST: postgres_service
-      POSTGRES_PORT: 5432
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
-      # todo Have to be hidden
-      TELEGRAM_BOT_NAME: TO_DEFINE
-      TELEGRAM_BOT_OWNER: TO_DEFINE
-      TELEGRAM_BOT_TOKEN: TO_DEFINE
-      LOGGING_LEVEL_ROOT: INFO
+      POSTGRES_DATABASE: ${TELEGRAM_BOT_POSTGRES_DB}
+      POSTGRES_HOST: ${TELEGRAM_BOT_POSTGRES_HOST}
+      POSTGRES_PORT: ${TELEGRAM_BOT_POSTGRES_PORT}
+      POSTGRES_USERNAME: ${TELEGRAM_BOT_POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${TELEGRAM_BOT_POSTGRES_PASSWORD}
+      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      TELEGRAM_BOT_OWNER: ${TELEGRAM_BOT_OWNER}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL_ROOT}
     build:
       context: .
       dockerfile: DockerfileTelegramBotEngine
@@ -47,18 +58,20 @@ services:
 #      - "8088:8080"
     depends_on:
       - postgres_service
+      - keycloak
 
   postgres_service:
     image: postgres:latest
     container_name: postgres_container
+    env_file: .env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      PGDATA: /var/lib/postgresql/data/pgdata
-    # todo Later hate to be hidden
+      POSTGRES_USER: ${TELEGRAM_BOT_POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${TELEGRAM_BOT_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${TELEGRAM_BOT_POSTGRES_DB}
+      PGDATA: ${TELEGRAM_BOT_PGDATA}
+#    # todo Later hate to be hidden
     ports:
-      - "5430:5432"
+      - "8089:5432"
 # todo Make with Volumes
 #    volumes:
 #      - ./pgdata:/var/lib/postgresql/data/pgdata
@@ -87,6 +100,68 @@ services:
     tty: true
     stdin_open: true
 
+  keycloak_postgres_service:
+    image: postgres:latest
+    container_name: keycloak_postgres_container
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${KEYCLOAK_POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
+      PGDATA: ${KEYCLOAK_PGDATA}
+
+#    ports:
+#      - "5430:5432"
+    # todo Make with Volumes
+    #    volumes:
+    #      - ./pgdata:/var/lib/postgresql/data/pgdata
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    command: >
+      postgres -c max_connections=1000
+               -c shared_buffers=256MB
+               -c effective_cache_size=768MB
+               -c maintenance_work_mem=64MB
+               -c checkpoint_completion_target=0.7
+               -c wal_buffers=16MB
+               -c default_statistics_target=100
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+  keycloak:
+    image: bitnami/keycloak
+    restart: always
+    ports:
+      - "8091:8080"
+    env_file: .env
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KEYCLOAK_DATABASE_HOST: ${KEYCLOAK_POSTGRES_HOST}
+      KEYCLOAK_DATABASE_PORT: ${KEYCLOAK_POSTGRES_PORT}
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DB}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USERNAME}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      KEYCLOAK_EXTRA_ARGS: --import-realm
+      KEYCLOAK_LOG_LEVEL: ${KEYCLOAK_LOG_LEVEL}
+    volumes:
+      - ./infrastructure/keycloak/realms:/opt/bitnami/keycloak/data/import
+    depends_on:
+      - keycloak_postgres_service
+
 #volumes:
 #  pgdata:
 #    driver: local
+

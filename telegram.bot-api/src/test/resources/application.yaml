@@ -1,3 +1,30 @@
+keycloak:
+  auth-server-url: TELEGRAM_BOT_NAME_STUB
+  realm: TELEGRAM_BOT_NAME_STUB
+
+
+
+logging:
+  level:
+    com.tatko: INFO
+    root: warn
+
+spring:
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  main:
+    banner-mode: off
+  datasource:
+    driver-class-name: org.h2.Driver
+  flyway:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+  profiles:
+    active: test
+
 telegram:
   bot:
     name: TELEGRAM_BOT_NAME_STUB
@@ -11,20 +38,3 @@ telegram:
       message:
         frequency:
           hour: 1
-
-logging:
-  level:
-    com.tatko: debug
-    root: warn
-
-spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-  flyway:
-    enabled: false
-  jpa:
-    properties:
-      hibernate:
-        show_sql: false
-  profiles:
-    active: test
